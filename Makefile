@@ -1,15 +1,13 @@
-#First of all we run the command:
-javacc minijava.jj
-#This produces 7 java files as output, including
-#a lexer and a parser
+compile:
+	java -jar ./CompileTools/jtb132di.jar -te minijava.jj
+	java -jar ./CompileTools/javacc5.jar minijava-jtb.jj
+# -d indicates to save the files inside of the src directory
+	javac -d ./ ./src/Main.java
 
-# We'll look at three things you can do with JavaCC
+run:
+# Run the Main class, specifying the classpath to the compiled classes directory
+	java -cp ./ src.Main ./FileInputs/Test.java
 
-# 1. Do a simple syntax check only
-# 2. Make an actual interpreter
-# 3. Generate code
-
-# Run the command:
-javac *.java
-java MiniJavaParser "hello"
-
+clean:
+	rm -rf *.class syntaxtree visitor minijava-jtb.jj *~
+	find . -maxdepth 1 -name '*.java' -delete
