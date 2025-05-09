@@ -8,7 +8,7 @@ compile:
 
 run:
 # Run the Main class, specifying the classpath to the compiled classes directory
-	java Main ./FileInputs/Test.java
+	java Main ./FileInputs/Test.java ./FileInputs/Test2.java
 
 clean:
 	rm -rf *.class syntaxtree visitor minijava-jtb.jj *~
