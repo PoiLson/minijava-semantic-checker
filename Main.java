@@ -32,6 +32,10 @@ public class Main {
                 // SymbolTableBuilder builder = new SymbolTableBuilder();
                 // root.accept(builder, null);
 
+
+                // // Print the symbol table after visiting the AST
+                // builder.printSymbolTable();
+
                 // // SEMANTIC CHECKING
                 // SemanticChecker checker = new SemanticChecker(symtab);
                 // root.accept(checker, null); //recursively visits every node, letting you add logic at each visit (e.g. store variables, check types, print info).
@@ -46,9 +50,11 @@ public class Main {
 
             }
             catch(ParseException ex){
+                System.err.println("Parse error in file: " + args[i]);
                 System.out.println(ex.getMessage());
             }
             catch(FileNotFoundException ex){
+                System.err.println("File not found: " + args[i]);
                 System.err.println(ex.getMessage());
             }
             finally{
