@@ -28,9 +28,9 @@ public class Main {
                 //Now root is my abstract syntax tree
                 Goal root = parser.Goal();
 
-                // BUILD SYMBOL TABLE
-                SymbolTableBuilder builder = new SymbolTableBuilder();
-                root.accept(builder, null);
+                // // BUILD SYMBOL TABLE
+                // SymbolTableBuilder builder = new SymbolTableBuilder();
+                // root.accept(builder, null);
 
                 // // SEMANTIC CHECKING
                 // SemanticChecker checker = new SemanticChecker(symtab);
