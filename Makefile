@@ -8,8 +8,8 @@ compile:
 
 run:
 # Run the Main class, specifying the classpath to the compiled classes directory
-	java Main ./FileInputs/Test.java ./FileInputs/Test2.java
+	java Main ./FileInputs/Test2.java
 
 clean:
 	rm -rf *.class syntaxtree visitor minijava-jtb.jj *~
-	find . -maxdepth 1 -name '*.java' ! -name 'Main.java' ! -name 'Visitor.java' ! -name 'SymbolTableBuilder.java' ! -name 'SymbolTable.java' ! -name 'ThrowException.java' -delete
+	find . -maxdepth 1 -name '*.java' ! -name 'Main.java' ! -name 'Visitor.java' ! -name 'SymbolTableVisitor.java' ! -name 'ThrowException.java' ! -name 'SemanticChecker.java' -delete

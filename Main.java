@@ -22,18 +22,19 @@ public class Main {
                 System.out.println("\nStatic Checking file: " + args[i]);
                 fis = new FileInputStream(args[i]);
 
+                // System.out.println("hiii");
                 MiniJavaParser parser = new MiniJavaParser(fis);
 
                 //Now root is my abstract syntax tree
                 Goal root = parser.Goal();
 
-                // // BUILD SYMBOL TABLE
-                // SymbolTableBuilder builder = new SymbolTableBuilder();
-                // root.accept(builder, null);
-
-
-                // // Print the symbol table after visiting the AST
-                // builder.printSymbolTable();
+                // BUILD SYMBOL TABLE
+                SymbolTableVisitor builder = new SymbolTableVisitor();
+                try {
+                    root.accept(builder, null);
+                } catch (Exception e) {
+                    System.err.println("Exception during evaluation: " + e.getMessage());
+                }
 
                 // // SEMANTIC CHECKING
                 // SemanticChecker checker = new SemanticChecker(symtab);
@@ -41,15 +42,17 @@ public class Main {
 
                 // System.out.println("Semantic checks passed.");
 
+                // // Print the symbol table after visiting the AST
+                // builder.printSymbolTable();
 
                 System.err.println("Program parsed successfully.");
 
-                Visitor eval = new Visitor();
-                try {
-                    root.accept(eval, null);
-                } catch (Exception e) {
-                    System.err.println("Exception during evaluation: " + e.getMessage());
-                }
+                // Visitor eval = new Visitor();
+                // try {
+                //     root.accept(eval, null);
+                // } catch (Exception e) {
+                //     System.err.println("Exception during evaluation: " + e.getMessage());
+                // }
 
             }
             catch(ParseException ex){
@@ -68,6 +71,9 @@ public class Main {
                     System.err.println(ex.getMessage());
                 }
             }
+
+            // // Print the symbol table after visiting the AST
+            // builder.printSymbolTable();
         }
     }
 }
