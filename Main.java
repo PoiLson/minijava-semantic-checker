@@ -1,12 +1,11 @@
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.text.ParseException;
 
 import syntaxtree.*;
 
 public class Main {
-    public static void main(String[] args) throws Exception
+    public static void main(String[] args)
     {
         if(args.length < 1)
         {
@@ -46,7 +45,11 @@ public class Main {
                 System.err.println("Program parsed successfully.");
 
                 Visitor eval = new Visitor();
-                root.accept(eval, null);
+                try {
+                    root.accept(eval, null);
+                } catch (Exception e) {
+                    System.err.println("Exception during evaluation: " + e.getMessage());
+                }
 
             }
             catch(ParseException ex){
@@ -65,7 +68,6 @@ public class Main {
                     System.err.println(ex.getMessage());
                 }
             }
-
         }
     }
 }
