@@ -48,24 +48,26 @@ public class ClassTableManager {
     classRecord.put(name,info);
   }
 
-  // Print all of the registered classes
-  public void printClassNames() {
-    System.out.println("Registered Classes:");
-    for (String className : classRecord.keySet()) {
-        System.out.print(className + " ");
-    }
-    System.out.println();
-}
 
-  // Print the symbol table
-  public void printSymbolTable() {
-    System.out.println("Complete Class Information:");
-    for (Map.Entry<String, ClassData> entry : classRecords.entrySet()) {
-        String className = entry.getKey();
-        ClassData details = entry.getValue();
-        System.out.println("- " + className + " extends from: " + details.getParent() + "\n");
-        details.showAttributes();
-        details.showMethods();
-    }
-}
+  // List all classes in symbol table
+  public void ListClasses(){
+    System.out.println("Symbol Table contains the following classes:");
+    Set< Map.Entry< String,ClassData> > st = classRecord.entrySet();
+     for (Map.Entry< String,ClassData> cur:st){
+         System.out.print(cur.getKey()+", ");
+     }
+     System.out.println("");
+  }
+
+  // List everything in symbol table
+  public void ListEverything(){
+    System.out.println(" Symbol Table contains the following classes:");
+    Set< Map.Entry <String,ClassData> > st = classRecord.entrySet();
+     for (Map.Entry <String,ClassData> cur:st){
+         System.out.println(" • " + cur.getKey() + " and extends from " + cur.getValue().extendsFrom);
+         cur.getValue().printFields();
+         cur.getValue().printMethodsDetails();
+     }
+     System.out.println("");
+  }
 }

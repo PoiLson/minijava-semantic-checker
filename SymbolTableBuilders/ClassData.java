@@ -73,15 +73,15 @@ public class ClassData {
      System.out.println("");
   }
 
-  // Print all methods with details
+  // List all methods in detailed form
   public void printMethodsDetails(){
     System.out.println("Class contains the following methods:");
     Set< Map.Entry <String,MethodData> > st = methods.entrySet();
-    for (Map.Entry<String,Method> cur:st){
+    for (Map.Entry<String,MethodData> cur:st){
       System.out.println("    • " + cur.getKey());
-      cur.getValue().ListArguments();
-      cur.getValue().ListVariables();
-      System.out.println("     and it's return type is " + cur.getValue().type);
+      cur.getValue().printParameters();
+      cur.getValue().printVariables();
+      System.out.println("and it's return type is " + cur.getValue().returnType);
     }
     System.out.println("");
   }
