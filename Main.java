@@ -19,7 +19,7 @@ public class Main {
         for(int i = 0; i < args.length; i++)
         {
             try{
-                System.out.println("\nStatic Checking file: " + args[i]);
+                System.out.println("Checking file: " + args[i]);
                 fis = new FileInputStream(args[i]);
 
                 // System.out.println("hiii");
@@ -28,52 +28,59 @@ public class Main {
                 //Now root is my abstract syntax tree
                 Goal root = parser.Goal();
 
-                // BUILD SYMBOL TABLE
+                // BUILD SYMBOL TABLE, first pass of the code!
                 SymbolTableVisitor builder = new SymbolTableVisitor();
-                try {
+                try
+                {
                     root.accept(builder, null);
-                } catch (Exception e) {
-                    System.err.println("Exception during evaluation: " + e.getMessage());
+                }
+                catch (Exception e)
+                {
+                    System.err.println("Exception thrown in the making of the symbol table: " + e.getMessage());
                 }
 
-                // // SEMANTIC CHECKING
-                // SemanticChecker checker = new SemanticChecker(symtab);
-                // root.accept(checker, null); //recursively visits every node, letting you add logic at each visit (e.g. store variables, check types, print info).
+                builder.getSymbolTable().printSymbolTable();
+
+
+                // // SEMANTIC CHECKING, second pass of the code!
+                // SemanticChecker checker = new SemanticChecker(builder.getSymbolTable());
+                // try
+                // {
+                //     root.accept(checker, null); //recursively visits every node, letting you add logic at each visit (e.g. store variables, check types, print info).
+                // }
+                // catch (Exception e)
+                // {
+                //     System.err.println("Exception thrown in the semantic checking of the code: " + e.getMessage());
+                // }
 
                 // System.out.println("Semantic checks passed.");
 
-                // // Print the symbol table after visiting the AST
-                // builder.printSymbolTable();
+                // // Produce offset results
+                // TypeChecker.getTypeCheck().StartCalculation();
 
                 System.err.println("Program parsed successfully.");
-
-                // Visitor eval = new Visitor();
-                // try {
-                //     root.accept(eval, null);
-                // } catch (Exception e) {
-                //     System.err.println("Exception during evaluation: " + e.getMessage());
-                // }
-
             }
-            catch(ParseException ex){
+            catch(ParseException ex)
+            {
                 System.err.println("Parse error in file: " + args[i]);
                 System.out.println(ex.getMessage());
-            }
-            catch(FileNotFoundException ex){
+    }
+            catch(FileNotFoundException ex)
+            {
                 System.err.println("File not found: " + args[i]);
                 System.err.println(ex.getMessage());
             }
-            finally{
-                try{
+            finally
+            {
+                try
+                {
                     if(fis != null) fis.close();
                 }
-                catch(IOException ex){
+                catch(IOException ex)
+                {
                     System.err.println(ex.getMessage());
                 }
             }
-
-            // // Print the symbol table after visiting the AST
-            // builder.printSymbolTable();
         }
     }
 }
