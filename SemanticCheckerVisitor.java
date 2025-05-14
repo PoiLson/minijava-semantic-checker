@@ -171,13 +171,45 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
 
 
     // AT THE END RE-OVERRIDE THE FUNCTIONS THAT GIVE TERMINAL SYMBOLS!!
-    // AND THOSE THAT WERE OVERRIDEVN DURING THE SYMBOL TABLE
+    // AND THOSE THAT WERE OVERRIDEN DURING THE SYMBOL TABLE
 
     @Override
     public String visit(Identifier n, String argu)
     {
         return n.f0.toString();
     }
-    
+
     // AND THE NEW TERMINAL SYMBOLS APPEARING!!!
+
+    /**
+    * f0 -> <INTEGER_LITERAL>
+    */
+    public String visit(IntegerLiteral n, String argu)
+    {
+        return "int";
+    }
+
+    /**
+    * f0 -> "true"
+    */
+    public String visit(TrueLiteral n, String argu)
+    {
+        return "true";
+    }
+
+    /**
+     * f0 -> "false"
+    */
+    public String visit(FalseLiteral n, String argu)
+    {
+        return "false";
+    }
+
+    /**
+     * f0 -> "this"
+    */
+    public String visit(ThisExpression n, String argu)
+    {
+        return "this";
+    }
 }

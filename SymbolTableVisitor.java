@@ -272,31 +272,37 @@ public class SymbolTableVisitor extends GJDepthFirst <String,String>
   //     return n.f0.accept(this, argu); 
   // }
   @Override
-  public String visit(BooleanArrayType n, String argu) {
+  public String visit(BooleanArrayType n, String argu)
+  {
       return "boolean[]";
   }
 
   @Override
-  public String visit(IntegerArrayType n, String argu) {
+  public String visit(IntegerArrayType n, String argu)
+  {
       return "int[]";
   }
 
   @Override
-  public String visit(BooleanType n, String argu){
+  public String visit(BooleanType n, String argu)
+  {
     return "boolean";
   }
 
   @Override
-  public String visit(IntegerType n, String argu) {
+  public String visit(IntegerType n, String argu)
+  {
     return "int";
   }
 
   @Override
-  public String visit(Identifier n, String argu) {
+  public String visit(Identifier n, String argu)
+  {
      return n.f0.toString();
   }
 
-  public SymbolTable getSymbolTable(){
+  public SymbolTable getSymbolTable()
+  {
     return this.symbolTable;
   }
 }
