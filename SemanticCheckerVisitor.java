@@ -76,17 +76,16 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     {
         try
         {
-            if("boolean" == n.f0.accept(this, argu) && "[" == n.f1.accept(this, argu) && "]" == n.f2.accept(this, argu))
-            {
-                return "Check BooleanArrayType";
-            }
+            String type = n.f0.accept(this,null);
+            checker.checkBooleanArrayType(type);
+            return "Check BooleanArrayType";
         }
         catch (Exception e)
         {
             System.err.println("Exception thrown in BooleanArrayType: " + e.getMessage());
             return null;
         }
-     }
+    }
   
      /**
       * f0 -> "int"
@@ -98,10 +97,9 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     {
         try
         {
-            if("int" == n.f0.accept(this, argu) && "[" == n.f1.accept(this, argu) && "]" == n.f2.accept(this, argu))
-            {
-                return "Check IntegerArrayType";
-            }
+            String type = n.f0.accept(this,null);
+            checker.checkIntegerArrayType(type);
+            return "Check IntegerArrayType";
         }
         catch (Exception e)
         {
@@ -110,7 +108,6 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
         }
     }
 
-
     /**
     * f0 -> "boolean"
     */
@@ -118,14 +115,13 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     {
         try
         {
-            if("boolean" == n.f0.accept(this, argu))
-            {
-                return "Check IntegerArrayType";
-            }
+            String type = n.f0.accept(this,null);
+            checker.checkBooleanType(type);
+            return "Check BooleanType";
         }
         catch (Exception e)
         {
-            System.err.println("Exception thrown in IntegerArrayType: " + e.getMessage());
+            System.err.println("Exception thrown in BooleanType: " + e.getMessage());
             return null;
         }
     }
@@ -137,14 +133,13 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     {
         try
         {
-            if("int" == n.f0.accept(this, argu))
-            {
-                return "Check IntegerArrayType";
-            }
+            String type = n.f0.accept(this,null);
+            checker.checkIntegerType(type);
+            return "Check IntegerType";
         }
         catch (Exception e)
         {
-            System.err.println("Exception thrown in IntegerArrayType: " + e.getMessage());
+            System.err.println("Exception thrown in IntegerType: " + e.getMessage());
             return null;
         }
     }

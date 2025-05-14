@@ -1,3 +1,4 @@
+
 import java.util.*;
 import SymbolTableBuilders.*;
 
@@ -64,5 +65,40 @@ public class Checker
         throw new RuntimeException("The method: " + currentMethod + " has not been declared inside the class: " + currentClass );
     }
 
+    // This function checks if the type given is boolean array type
+    public boolean checkBooleanArrayType(String type)
+    {
+        if(type == "boolean[]")
+            return true;
+        
+        throw new RuntimeException("Was expecting boolean[] instead of: " + type );
+    }
+
+    // This function checks if the type given is integer array type
+    public boolean checkIntegerArrayType(String type)
+    {
+        if(type == "int[]")
+            return true;
+        
+        throw new RuntimeException("Was expecting int[] instead of: " + type );
+    }
+
+    // This function checks if the type given is boolean
+    public boolean checkBooleanType(String type)
+    {
+        if(type == "boolean")
+            return true;
+        
+        throw new RuntimeException("Was expecting boolean instead of: " + type );
+    }
+
+    // This function checks if the type given is integer
+    public boolean checkIntegerType(String type)
+    {
+        if(type == "int")
+            return true;
+        
+        throw new RuntimeException("Was expecting int instead of: " + type );
+    }
 
 }
