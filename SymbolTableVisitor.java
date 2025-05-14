@@ -5,13 +5,13 @@ import SymbolTableBuilders.*;
 
 public class SymbolTableVisitor extends GJDepthFirst <String,String>
 {
-  SymbolTableManager symbolTable; // our symbol table
+  SymbolTable symbolTable; // our symbol table
   String currentClass;
   String currentFunction;
 
   public SymbolTableVisitor()
   {
-    symbolTable = new SymbolTableManager();
+    symbolTable = new SymbolTable();
   }
 
   /**
@@ -296,7 +296,7 @@ public class SymbolTableVisitor extends GJDepthFirst <String,String>
      return n.f0.toString();
   }
 
-  public SymbolTableManager getSymbolTable(){
+  public SymbolTable getSymbolTable(){
     return this.symbolTable;
   }
 }

@@ -14,5 +14,6 @@ run:
 
 clean:
 	rm -rf *.class syntaxtree visitor minijava-jtb.jj *~
-	find . -maxdepth 1 -name '*.java' ! -name 'Main.java' ! -name 'Visitor.java' ! -name 'SymbolTableVisitor.java' ! -name 'ThrowException.java' ! -name 'SemanticChecker.java' -delete
+	find . -maxdepth 1 -name '*.java' ! -name 'Main.java' ! -name 'Visitor.java' ! -name 'SymbolTableVisitor.java' ! -name 'ThrowException.java' ! -name 'SemanticChecker.java' ! -name 'SemanticCheckerVisitor.java' -delete
 	find . -maxdepth 2 -name '*.class' -delete
+	clear

@@ -42,18 +42,18 @@ public class Main {
                 builder.getSymbolTable().printSymbolTable();
 
 
-                // // SEMANTIC CHECKING, second pass of the code!
-                // SemanticChecker checker = new SemanticChecker(builder.getSymbolTable());
-                // try
-                // {
-                //     root.accept(checker, null); //recursively visits every node, letting you add logic at each visit (e.g. store variables, check types, print info).
-                // }
-                // catch (Exception e)
-                // {
-                //     System.err.println("Exception thrown in the semantic checking of the code: " + e.getMessage());
-                // }
+                // SEMANTIC CHECKING, second pass of the code!
+                SemanticCheckerVisitor checker = new SemanticCheckerVisitor(builder.getSymbolTable());
+                try
+                {
+                    root.accept(checker, null); //recursively visits every node, letting you add logic at each visit (e.g. store variables, check types, print info).
+                }
+                catch (Exception e)
+                {
+                    System.err.println("Exception thrown in the semantic checking of the code: " + e.getMessage());
+                }
 
-                // System.out.println("Semantic checks passed.");
+                System.out.println("Semantic checks passed.");
 
                 // // Produce offset results
                 // TypeChecker.getTypeCheck().StartCalculation();

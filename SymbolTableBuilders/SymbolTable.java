@@ -3,12 +3,12 @@ package SymbolTableBuilders;
 import java.util.*;
 
 // Symbol table for our minijava semantic analysis
-public class SymbolTableManager
+public class SymbolTable
 {
   public LinkedHashMap <String, ClassData> classRecord; // [ class name , class info ]
 
-  // Initialize our structure that holds the classes of our program
-  public SymbolTableManager()
+  // Initialize our structure that holds the structure of our program
+  public SymbolTable()
   {
     classRecord = new LinkedHashMap<String, ClassData>();
   }
