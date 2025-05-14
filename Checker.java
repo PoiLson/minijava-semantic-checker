@@ -9,7 +9,7 @@ public class Checker
 {
     public SymbolTable symboltable;
     String currentClass="";
-    String currentFunction="";
+    String currentMethod="";
 
     // Constructor
     public Checker(SymbolTable symboltable)
@@ -23,9 +23,9 @@ public class Checker
         this.currentClass = currentClass;
     }
 
-    public void setCurrentFunction(String currentFunction)
+    public void setCurrentMethod(String currentMethod)
     {
-        this.currentFunction = currentFunction;
+        this.currentMethod = currentMethod;
     }
 
     // Get functions (getters)
@@ -34,17 +34,35 @@ public class Checker
         return this.currentClass;
     }
 
-    public String getCurrentFunction()
+    public String getCurrentMethod()
     {
-        return this.currentFunction;
+        return this.currentMethod;
     }
 
     // This function checks if the currentClass exists in our symbol table
-    public void checkExistingClass()
+    // Maybe bollean 0 -> it does not exist, 1 -> it exists
+    public boolean checkExistingClass()
     {
+        if(symboltable.classRecord.containsKey(currentClass))
+        {
+            return true;
+        }
         
+        throw new RuntimeException("The class: " + currentClass + " has not been declared in the program");
     }
 
+    // This function checks if the currentMethod exists in our symbol table
+    // Maybe bollean 0 -> it does not exist, 1 -> it exists
+    public boolean checkExistingMethod()
+    {
+        // NEEDS FIXING!!!
+        if(symboltable.classRecord.containsKey(currentMethod))
+        {
+            return true;
+        }
+        
+        throw new RuntimeException("The method: " + currentMethod + " has not been declared inside the class: " + currentClass );
+    }
 
 
 }

@@ -46,17 +46,13 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
             // Store the name of the class so the checker will check if it exists
             checker.setCurrentClass(n.f1.accept(this, argu));
 
-            // Store the name of the function so the checker will check if it exists
-            checker.setCurrentFunction("main");
+            // Store the name of the method so the checker will check if it exists
+            checker.setCurrentMethod("main");
 
-
-            //sth for the args of the method
-            n.f11.accept(this, argu);
-
-            //sth for the vardeclaration
+            // Visit the VarDeclaration -> no need to override her!!
             n.f14.accept(this, argu);
 
-            //sth for the statement
+            // Visit the Statement -> no need to override her!!
             n.f15.accept(this, argu);
 
             return "Check MainClass";
@@ -67,6 +63,92 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
             return null;
         }
     }
+
+    // I will not override the Type and the ArrayType as well
+
+    /**
+    * f0 -> "boolean"
+    * f1 -> "["
+    * f2 -> "]"
+    */
+    @Override
+    public String visit(BooleanArrayType n, String argu)
+    {
+        try
+        {
+            if("boolean" == n.f0.accept(this, argu) && "[" == n.f1.accept(this, argu) && "]" == n.f2.accept(this, argu))
+            {
+                return "Check BooleanArrayType";
+            }
+        }
+        catch (Exception e)
+        {
+            System.err.println("Exception thrown in BooleanArrayType: " + e.getMessage());
+            return null;
+        }
+     }
+  
+     /**
+      * f0 -> "int"
+      * f1 -> "["
+      * f2 -> "]"
+      */
+    @Override
+    public String visit(IntegerArrayType n, String argu) 
+    {
+        try
+        {
+            if("int" == n.f0.accept(this, argu) && "[" == n.f1.accept(this, argu) && "]" == n.f2.accept(this, argu))
+            {
+                return "Check IntegerArrayType";
+            }
+        }
+        catch (Exception e)
+        {
+            System.err.println("Exception thrown in IntegerArrayType: " + e.getMessage());
+            return null;
+        }
+    }
+
+
+    /**
+    * f0 -> "boolean"
+    */
+    public String visit(BooleanType n, String argu)
+    {
+        try
+        {
+            if("boolean" == n.f0.accept(this, argu))
+            {
+                return "Check IntegerArrayType";
+            }
+        }
+        catch (Exception e)
+        {
+            System.err.println("Exception thrown in IntegerArrayType: " + e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * f0 -> "int"
+    */
+    public String visit(IntegerType n, String argu)
+    {
+        try
+        {
+            if("int" == n.f0.accept(this, argu))
+            {
+                return "Check IntegerArrayType";
+            }
+        }
+        catch (Exception e)
+        {
+            System.err.println("Exception thrown in IntegerArrayType: " + e.getMessage());
+            return null;
+        }
+    }
+
 
 
 }
