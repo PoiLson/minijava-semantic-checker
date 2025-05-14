@@ -9,7 +9,7 @@ public class Checker
 {
     public SymbolTable symboltable;
     String currentClass="";
-    String currentMethod="";
+    String currentFunction="";
 
     // Constructor
     public Checker(SymbolTable symboltable)
@@ -23,9 +23,9 @@ public class Checker
         this.currentClass = currentClass;
     }
 
-    public void setCurrentMethod(String currentMethod)
+    public void setCurrentFunction(String currentFunction)
     {
-        this.currentMethod = currentMethod;
+        this.currentFunction = currentFunction;
     }
 
     // Get functions (getters)
@@ -34,9 +34,17 @@ public class Checker
         return this.currentClass;
     }
 
-    public String getCurrentMethod()
+    public String getCurrentFunction()
     {
-        return this.currentMethod;
+        return this.currentFunction;
     }
+
+    // This function checks if the currentClass exists in our symbol table
+    public void checkExistingClass()
+    {
+        
+    }
+
+
 
 }
