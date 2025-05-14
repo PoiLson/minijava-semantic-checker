@@ -65,6 +65,16 @@ public class Checker
         throw new RuntimeException("The method: " + currentMethod + " has not been declared inside the class: " + currentClass );
     }
 
+    // This function checks if the type given is of correct form
+    public boolean checkType(String type)
+    {
+        // check if type is one of the classes declared
+        if( symboltable.classRecord.containsKey(type) || type.equals("boolean[]") || type.equals("int[]") || type.equals("boolean") || type.equals("int"))
+            return true;
+        
+        throw new RuntimeException("This type: " + type + " is not acceptable.");
+    }
+
     // This function checks if the type given is boolean array type
     public boolean checkBooleanArrayType(String type)
     {

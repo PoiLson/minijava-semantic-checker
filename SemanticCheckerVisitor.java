@@ -10,6 +10,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
 {
     Checker checker;
 
+    // Constructor
     public SemanticCheckerVisitor(SymbolTable symbolTable)
     {
         // Pass the symbol table to our semantic checker
@@ -64,7 +65,29 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
         }
     }
 
-    // I will not override the Type and the ArrayType as well
+    // I will not override the Type and the ArrayType as well -> eventualy I need the Type
+    // So, now we override the Type so that we will be able to recognise a semantic error
+
+   /**
+    * f0 -> ArrayType()
+    *       | BooleanType()
+    *       | IntegerType()
+    *       | Identifier()
+    */
+    public String visit(Type n, String argu)
+    {
+        try
+        {
+            String type = n.f0.accept(this,null);
+            checker.checkType(type);
+            return "Check Type";
+        }
+        catch (Exception e)
+        {
+            System.err.println("Exception thrown in Type: " + e.getMessage());
+            return null;
+        }
+    }
 
     /**
     * f0 -> "boolean"
@@ -146,4 +169,15 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
 
 
 
+
+    // AT THE END RE-OVERRIDE THE FUNCTIONS THAT GIVE TERMINAL SYMBOLS!!
+    // AND THOSE THAT WERE OVERRIDEVN DURING THE SYMBOL TABLE
+
+    @Override
+    public String visit(Identifier n, String argu)
+    {
+        return n.f0.toString();
+    }
+    
+    // AND THE NEW TERMINAL SYMBOLS APPEARING!!!
 }
