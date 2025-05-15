@@ -301,8 +301,7 @@ public class SymbolTableVisitor extends GJDepthFirst <String,String>
      return n.f0.toString();
   }
 
-  public SymbolTable getSymbolTable()
-  {
+  public SymbolTable getSymbolTable(){
     return this.symbolTable;
   }
 }

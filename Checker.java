@@ -68,7 +68,7 @@ public class Checker
     }
 
     // Check that identifier has been declared in the appropriate scope
-    public boolean IsIdentifierDeclared(String identifier)
+    public boolean isIdentifierDeclared(String identifier)
     {
         // Checks inside Class fields
         boolean declaredAsClassField = symboltable.classRecord.get(currentClass).variables.containsKey(identifier);
@@ -87,7 +87,7 @@ public class Checker
 
         // Checks inside Inherited fields from parent classes
         boolean declaredAsFieldInParentClass = false;
-        if(SearchAncestors(currentClass,identifier) != "")
+        if(searchAncestors(currentClass,identifier) != "")
             declaredAsFieldInParentClass = true;
 
         if( !(declaredAsClassField || declaredAsMethodParameter || declaredAsMethodVariable || declaredAsFieldInParentClass) )
@@ -97,7 +97,7 @@ public class Checker
     }   
     
     // Return identifier's type that has been declared to an ancestor
-    public String SearchAncestors(String className, String identifier)
+    public String searchAncestors(String className, String identifier)
     {
         String parentClass = symboltable.classRecord.get(className).extendsFrom;
 
@@ -113,9 +113,9 @@ public class Checker
     }
 
     // Get the type of the identifier given by checking its declaration scope
-    public String FindIdentifier(String identifier)
+    public String findType(String identifier)
     {
-        IsIdentifierDeclared(identifier);
+        isIdentifierDeclared(identifier);
 
         String identifierType;
 
@@ -137,7 +137,7 @@ public class Checker
         if(identifierType != null)
             return identifierType;
 
-        identifierType = SearchAncestors(currentClass, identifier);
+        identifierType = searchAncestors(currentClass, identifier);
         if(identifierType != "")
             return identifierType;
 
@@ -149,7 +149,7 @@ public class Checker
     //      String x = 5; -> do not allow it
     public boolean checkAssignmentStatement(String identifier, String expression)
     {
-        String identifierType = FindIdentifier(identifier);
+        String identifierType = findType(identifier);
 
         // Direct type match
         if(identifierType.equals(expression))
@@ -183,16 +183,16 @@ public class Checker
         else if(expression.startsWith("/"))
             typeOfExpression = expression.substring(1); 
         // if expression returns an identifier
-        else if( !expression.startsWith("/") && expression != "int" && expression != "boolean" && expression != "int array" && !(symboltable.classRecord.containsKey(expression)))
-            typeOfExpression = FindIdentifier(expression);
+        else if( !expression.startsWith("/") && expression != "int" && expression != "boolean" && expression != "int[]" && expression != "boolean[]" && !(symboltable.classRecord.containsKey(expression)))
+            typeOfExpression = findType(expression);
         
         return typeOfExpression;
     }
 
     // Check if the clause given is boolean
-    public void IsClauseBoolean(String clause)
+    public void isClauseBoolean(String clause)
     {
-        String clauseType = FindIdentifier(clause);
+        String clauseType = findType(clause);
 
         if(clauseType != "boolean")
             throw new RuntimeException("Clause: " + clause + " in method " + currentMethod + " of class " + currentClass + " isn't a boolean.");
@@ -202,24 +202,24 @@ public class Checker
     public void checkAndExpression(String firstClause, String secondClause)
     {
         // Check first variable
-        if(firstClause == "int" || firstClause == "this" || firstClause == "int array" || firstClause.startsWith("/") || symboltable.classRecord.containsKey(firstClause))
+        if(firstClause == "int" || firstClause == "this" || firstClause == "int[]" || firstClause == "boolean[]" || firstClause.startsWith("/") || symboltable.classRecord.containsKey(firstClause))
             throw new RuntimeException("Invalid AND operation in class: " + currentClass + " of method: " + currentMethod + ", first clause must be of type boolean");
         
         if(firstClause != "boolean")
-            IsClauseBoolean(firstClause);
+            isClauseBoolean(firstClause);
         
         // Check second variable
-        if(secondClause == "int" || secondClause == "this" || secondClause == "int array" || secondClause.startsWith("/") || symboltable.classRecord.containsKey(secondClause))
+        if(secondClause == "int" || secondClause == "this" || secondClause == "int[]" || firstClause == "boolean[]" || secondClause.startsWith("/") || symboltable.classRecord.containsKey(secondClause))
             throw new RuntimeException("Invalid AND operation in class " + currentClass + " of method " + currentMethod + ", second clause must be of type boolean");
         
         if(secondClause != "boolean")
-            IsClauseBoolean(secondClause);
+            isClauseBoolean(secondClause);
     }
 
     // Check if the primary expression given is int
-    public void IsPrimaryExprInt(String primaryExpr)
+    public void isPrimaryExprInt(String primaryExpr)
     {
-        String primaryExprType = FindIdentifier(primaryExpr);
+        String primaryExprType = findType(primaryExpr);
 
         if(primaryExprType != "int")
             throw new RuntimeException("Clause: " + primaryExpr + " in method " + currentMethod + " of class " + currentClass + " isn't an int.");
@@ -229,23 +229,197 @@ public class Checker
     public void checkPrimaryExpression(String firstPrimaryExpr, String secondPrimaryExpr)
     {
         // Check first variable
-        if(firstPrimaryExpr == "boolean" || firstPrimaryExpr == "this" || firstPrimaryExpr == "int array" || firstPrimaryExpr.startsWith("/") || symboltable.classRecord.containsKey(firstPrimaryExpr))
+        if(firstPrimaryExpr == "boolean" || firstPrimaryExpr == "this" || firstPrimaryExpr == "int[]" || firstPrimaryExpr == "boolean[]" || firstPrimaryExpr.startsWith("/") || symboltable.classRecord.containsKey(firstPrimaryExpr))
             throw new RuntimeException("Invalid AND operation in class: " + currentClass + " of method: " + currentMethod + ", first primary expression must be of type int");
         
         if(firstPrimaryExpr != "int")
-            IsPrimaryExprInt(firstPrimaryExpr);
+            isPrimaryExprInt(firstPrimaryExpr);
         
         // Check second variable
-        if(secondPrimaryExpr == "boolean" || secondPrimaryExpr == "this" || secondPrimaryExpr == "int array" || secondPrimaryExpr.startsWith("/") || symboltable.classRecord.containsKey(secondPrimaryExpr))
+        if(secondPrimaryExpr == "boolean" || secondPrimaryExpr == "this" || secondPrimaryExpr == "int[]" || secondPrimaryExpr == "boolean[]" || secondPrimaryExpr.startsWith("/") || symboltable.classRecord.containsKey(secondPrimaryExpr))
             throw new RuntimeException("Invalid AND operation in class " + currentClass + " of method " + currentMethod + ", second primary expression must be of type int");
         
         if(secondPrimaryExpr != "int")
-            IsPrimaryExprInt(secondPrimaryExpr);
+            isPrimaryExprInt(secondPrimaryExpr);
+    }
+
+    // Check if it is a valid array name
+    public String isArrNameValid(String arrayName)
+    {
+        String typeArrName = findType(arrayName);
+
+        // Check if type is int array or a boolean array
+        if(!(typeArrName.equals("int[]") || typeArrName.equals("boolean[]")))
+            throw new RuntimeException("This array: " + arrayName + " in method " + currentMethod + " of class " + currentClass + " isn't an int or a boolean array");
+   
+        if(typeArrName.equals("int[]"))
+            return "int";
+        else if(typeArrName.equals("boolean[]"))
+            return "boolean";
+
+        return null;
+    }
+
+    // This function checks if the array name and size given are semantically correct
+    public String checkArrayLookup(String arrayName, String arraySize)
+    {
+        String typeArrName = null;
+
+        // Check if the arrayName is actually an array's name
+        if(arrayName == "boolean" || arrayName == "this" || arrayName == "int" || arrayName.startsWith("/") || symboltable.classRecord.containsKey(arrayName))
+            throw new RuntimeException("Invalid array lookup in class: " + currentClass + " of method: " + currentMethod + ", expression must be of type array.");
+        
+        if(!(arrayName.equals("int[]") || arrayName.equals("boolean[]")))
+            typeArrName = isArrNameValid(arrayName);
+        
+        // Check second variable
+        if(arraySize == "boolean" || arraySize == "this" || arraySize == "int[]" || arraySize.startsWith("/") || symboltable.classRecord.containsKey(arraySize))
+            throw new RuntimeException("Invalid array lookup in class " + currentClass + " of method " + currentMethod + ", size expression must be of type int");
+        
+        if(arraySize != "int")
+            isPrimaryExprInt(arraySize);
+
+        return typeArrName;
+    }
+
+    // This function checks if tof the MessageSend rule of our grammarhe array name has been declarfed before in our program and in the current scope
+    public String checkArrayLength(String arrayName)
+    {
+        // Check if the arrayName is actually an array's name
+        if(arrayName == "boolean" || arrayName == "this" || arrayName == "int" || arrayName.startsWith("/") || symboltable.classRecord.containsKey(arrayName))
+            throw new RuntimeException("Invalid array length operation in class: " + currentClass + " of method: " + currentMethod + ", expression must be of type array.");
+        
+        if(!(arrayName.equals("int[]") || arrayName.equals("boolean[]")))
+            return isArrNameValid(arrayName);
+        
+        return null;
+    }
+
+    // Check if variable is an existing class
+    public String isVarDeclaredClass(String var)
+    {
+        String type = findType(var);
+
+        if( type == "int" || type == "int[]" || type == "boolean[]" || type == "boolean" )
+            throw new RuntimeException("Var " + var + " in method " + currentMethod + " of class " + currentClass + " must be a declared class");
+        
+        return type;
+    }
+
+    // Check if a method can be called from primary expression specified
+    public void canBeCalled(String expr)
+    {
+        if(expr == "this" || expr.startsWith("/"))
+            return;
+
+        if(symboltable.classRecord.containsKey(expr))
+            return;
+
+        if( expr == "boolean" || expr == "int" || expr == "int[]" || expr == "boolean[]" )
+            throw new RuntimeException("Function call in class " + currentClass + " of method " + currentMethod + ", cannot be called by a non class object");
+        
+        isIdentifierDeclared(expr);
+        isVarDeclaredClass(expr);
+    }
+
+    // This function is responsible for the semantic check of the calling of the methods
+    public String checkMessageSend(String caller, String method, ArrayList<String> parameters)
+    {
+        // First of all check if we can call the method from the caller class
+        canBeCalled(caller);
+
+        // Determine from which class the method is called on
+        String fromClass;
+
+        // If caller is "this", the current class is used
+        if(caller == "this")
+            fromClass = currentClass;
+        // If caller starts with "/", it is an allocated object and the class name is extracted
+        else if(caller.startsWith("/"))
+            fromClass = caller.substring(1);
+        // If caller is directly a class name, use this of course
+        else if( symboltable.classRecord.containsKey(caller) )
+            fromClass = caller;
+        // After everything else, resolve the class of the variable caller refers to
+        else
+            fromClass = isVarDeclaredClass(caller);
+        
+        // Now check for the method in the class or in one of its father classes, if it has
+        String type = null;
+        String parentClass = symboltable.classRecord.get(fromClass).extendsFrom;
+
+        ArrayList<String> methodArgs = null;
+        
+        // Does it exist in the current class?
+        if(symboltable.classRecord.get(fromClass).functions.containsKey(method))
+        {
+            type = symboltable.classRecord.get(fromClass).functions.get(method).returnType;
+            methodArgs = new ArrayList<>(symboltable.classRecord.get(fromClass).functions.get(method).parameters.values());
+        }
+        // Or does it exist in one of the father classes
+        // In which case we traverse up the inheritance chain to find it
+        else if(parentClass != "")
+        {
+            boolean found = false;
+
+            while(parentClass != "")
+            {
+                if(symboltable.classRecord.get(parentClass).functions.containsKey(method))
+                {
+                    type = symboltable.classRecord.get(parentClass).functions.get(method).returnType;
+                    methodArgs = new ArrayList<>(symboltable.classRecord.get(parentClass).functions.get(method).parameters.values());
+                    found = true;
+
+                    break;
+                }
+
+                parentClass = symboltable.classRecord.get(parentClass).extendsFrom;
+            }
+
+            if(!found)
+                throw new RuntimeException("There is no method " + method + " in class " + fromClass + " to call from. ( tried to call from method " + currentMethod + " of class " + currentClass + ")");
+        }
+        else
+            throw new RuntimeException("There is no method " + method + " in class " + fromClass + " to call from. ( tried to call from method " + currentMethod + " of class " + currentClass + ")");
+        
+        // Check if the number of parameters given is the same with method's declared number of parameters
+        if(methodArgs.size() != parameters.size())
+            throw new RuntimeException("Parameters aren't the same type, as declared, in method " + method + " of class " + fromClass + " to call from. ( tried to call from method " + currentMethod + " of class " + currentClass + ")");
+        
+        // Check for type equality
+        for(int i=0; i <methodArgs.size(); i++)
+        {
+            if(!(methodArgs.get(i).equals(parameters.get(i))))
+            {
+                // If type of expr is a class
+                if(symboltable.classRecord.containsKey(parameters.get(i)))
+                {
+                    // Check if that class derives from a class with same type of destination's type
+                    boolean found = false;
+                    parentClass = symboltable.classRecord.get(parameters.get(i)).extendsFrom;
+                    
+                    while(parentClass != "")
+                    {
+                        if( methodArgs.get(i).equals(parentClass) )
+                            found = true;
+                        parentClass = symboltable.classRecord.get(parentClass).extendsFrom;
+                    }
+
+                    if(!found)
+                        throw new RuntimeException("Parameters aren't the same type, as declared, in method " + method + " of class " + fromClass + " to call from. ( tried to call from method " + currentMethod + " of class " + currentClass + ")");
+                }
+            }
+        }
+
+        return type;
     }
 
 
 
-    
+
+
+
+
 
 
 

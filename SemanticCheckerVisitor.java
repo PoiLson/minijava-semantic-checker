@@ -10,6 +10,10 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
 {
     Checker checker;
 
+    // We need a stack to store the
+    // Argument type lists for nested method calls
+    Stack <ArrayList <String> > parameters;
+
     // Constructor
     public SemanticCheckerVisitor(SymbolTable symbolTable)
     {
@@ -156,7 +160,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
 
             checker.checkPrimaryExpression(firstPrimaryExpr, secondPrimaryExpr);
             
-            return "Check CompareExpression";
+            return "boolean";
         }
         catch (Exception e)
         {
@@ -180,7 +184,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
 
             checker.checkPrimaryExpression(firstPrimaryExpr, secondPrimaryExpr);
             
-            return "Check PlusExpression";
+            return "int";
         }
         catch (Exception e)
         {
@@ -204,7 +208,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
 
             checker.checkPrimaryExpression(firstPrimaryExpr, secondPrimaryExpr);
             
-            return "Check MinusExpression";
+            return "int";
         }
         catch (Exception e)
         {
@@ -228,7 +232,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
 
             checker.checkPrimaryExpression(firstPrimaryExpr, secondPrimaryExpr);
             
-            return "Check TimesExpression";
+            return "int";
         }
         catch (Exception e)
         {
@@ -237,9 +241,88 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
         }  
     }
 
+   /**
+    * f0 -> PrimaryExpression()
+    * f1 -> "["
+    * f2 -> PrimaryExpression()
+    * f3 -> "]"
+    */
+    @Override
+    public String visit(ArrayLookup n, String argu)
+    {
+        try
+        {
+            String arrayName = n.f0.accept(this,null);
+            String arraySize = n.f2.accept(this,null);
+
+            return checker.checkArrayLookup(arrayName, arraySize);
+        }
+        catch (Exception e)
+        {
+            System.err.println("Exception thrown in ArrayLookup: " + e.getMessage());
+            return null;
+        }
+    }
+  
+   /**
+    * f0 -> PrimaryExpression()
+    * f1 -> "."
+    * f2 -> "length"
+    */
+    @Override
+    public String visit(ArrayLength n, String argu)
+    {
+        try
+        {
+            String arrayName = n.f0.accept(this,null);
+
+            return checker.checkArrayLength(arrayName);
+        }
+        catch (Exception e)
+        {
+            System.err.println("Exception thrown in ArrayLength: " + e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+    * f0 -> PrimaryExpression()
+    * f1 -> "."
+    * f2 -> Identifier()
+    * f3 -> "("
+    * f4 -> ( ExpressionList() )?
+    * f5 -> ")"
+    */
+    @Override
+    public String visit(MessageSend n, String argu)
+    {
+        try
+        {
+            // Collect the types of the arguments of this method call
+            parameters.push(new ArrayList<String>());
+
+            String caller = n.f0.accept(this,null);
+            String method = n.f2.accept(this,null);
+
+            // Visit EpxressionList
+            n.f4.accept(this,null);
+
+            String methodType = checker.checkMessageSend(caller, method, parameters.pop());
+
+            return methodType;
+        }
+        catch (Exception e)
+        {
+            System.err.println("Exception thrown in MessageSend: " + e.getMessage());
+            return null;
+        }
+    }
 
 
-    
+
+
+
+
 
 
     
