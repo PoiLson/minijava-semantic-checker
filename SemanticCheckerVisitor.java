@@ -65,6 +65,62 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
         }
     }
 
+    /**
+    * f0 -> Identifier()
+    * f1 -> "="
+    * f2 -> Expression()
+    * f3 -> ";"
+    */
+    @Override
+    public String visit(AssignmentStatement n, String argu)
+    {
+        try
+        {
+            String identifier = n.f0.accept(this,null);
+            String expression = n.f2.accept(this,null);
+
+            checker.checkAssignmentStatement(identifier, expression);
+            return "Check AssignmentStatement";
+        }
+        catch (Exception e)
+        {
+            System.err.println("Exception thrown in AssignmentStatement: " + e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+    * f0 -> AndExpression()
+    *       | CompareExpression()
+    *       | PlusExpression()
+    *       | MinusExpression()
+    *       | TimesExpression()
+    *       | ArrayLookup()
+    *       | ArrayLength()
+    *       | MessageSend()
+    *       | Clause()
+    */
+    @Override
+    public String visit(Expression n, String argu) 
+    {
+        try
+        {
+            String expression = n.f0.accept(this,null);
+
+            return checker.checkExpression(expression);
+        }
+        catch (Exception e)
+        {
+            System.err.println("Exception thrown in Expression: " + e.getMessage());
+            return null;
+        }
+    }
+
+
+
+
+
+    
     // I will not override the Type and the ArrayType as well -> eventualy I need the Type
     // So, now we override the Type so that we will be able to recognise a semantic error
 
@@ -74,6 +130,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     *       | IntegerType()
     *       | Identifier()
     */
+    @Override
     public String visit(Type n, String argu)
     {
         try
@@ -134,6 +191,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     /**
     * f0 -> "boolean"
     */
+    @Override
     public String visit(BooleanType n, String argu)
     {
         try
@@ -152,6 +210,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     /**
      * f0 -> "int"
     */
+    @Override
     public String visit(IntegerType n, String argu)
     {
         try
@@ -167,9 +226,6 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
         }
     }
 
-
-
-
     // AT THE END RE-OVERRIDE THE FUNCTIONS THAT GIVE TERMINAL SYMBOLS!!
     // AND THOSE THAT WERE OVERRIDEN DURING THE SYMBOL TABLE
 
@@ -184,14 +240,17 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     /**
     * f0 -> <INTEGER_LITERAL>
     */
+    @Override
     public String visit(IntegerLiteral n, String argu)
     {
+        // Can it be anything else?
         return "int";
     }
 
     /**
     * f0 -> "true"
     */
+    @Override
     public String visit(TrueLiteral n, String argu)
     {
         return "true";
@@ -200,6 +259,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     /**
      * f0 -> "false"
     */
+    @Override
     public String visit(FalseLiteral n, String argu)
     {
         return "false";
@@ -208,6 +268,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     /**
      * f0 -> "this"
     */
+    @Override
     public String visit(ThisExpression n, String argu)
     {
         return "this";

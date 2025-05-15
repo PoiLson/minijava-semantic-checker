@@ -65,7 +65,133 @@ public class Checker
         throw new RuntimeException("The method: " + currentMethod + " has not been declared inside the class: " + currentClass );
     }
 
+    // Check that identifier has been declared in the appropriate scope
+    public boolean IsIdentifierDeclared(String identifier)
+    {
+        // Checks inside Class fields
+        boolean declaredAsClassField = symboltable.classRecord.get(currentClass).variables.containsKey(identifier);
+        
+        // Checks inside Local variables inside a method
+        boolean declaredAsMethodVariable = false;
+
+        // Checks inside Method parameters
+        boolean declaredAsMethodParameter = false;
+
+        if(currentMethod != "")
+        {
+            declaredAsMethodVariable = symboltable.classRecord.get(currentClass).functions.get(currentMethod).variables.containsKey(identifier);
+            declaredAsMethodParameter = symboltable.classRecord.get(currentClass).functions.get(currentMethod).parameters.containsKey(identifier);
+        }
+
+        // Checks inside Inherited fields from parent classes
+        boolean declaredAsFieldInParentClass = false;
+        if(SearchAncestors(currentClass,identifier) != "")
+            declaredAsFieldInParentClass = true;
+
+        if( !(declaredAsClassField || declaredAsMethodParameter || declaredAsMethodVariable || declaredAsFieldInParentClass) )
+            throw new RuntimeException("This identifier: " + identifier + " is not declared anywhere.");
+    
+        return true;
+    }   
+    
+    // Return identifier's type that has been declared to an ancestor
+    public String SearchAncestors(String className, String identifier)
+    {
+        String parentClass = symboltable.classRecord.get(className).extendsFrom;
+
+        while(parentClass != "")
+        {
+            String type = symboltable.classRecord.get(parentClass).variables.get(identifier);
+            if(type != null)
+                return type;
+
+            parentClass = symboltable.classRecord.get(parentClass).extendsFrom;
+        }
+        return "";
+    }
+
+    // Get the type of the identifier given by checking its declaration scope
+    public String FindIdentifier(String identifier)
+    {
+        IsIdentifierDeclared(identifier);
+
+        String identifierType;
+
+        if(currentMethod != "")
+        {
+            // Get type from method's variables
+            identifierType = symboltable.classRecord.get(currentClass).functions.get(currentMethod).variables.get(identifier);
+            if( identifierType != null)
+                return identifierType;
+            
+            // Get type from method's parameters
+            identifierType = symboltable.classRecord.get(currentClass).functions.get(currentMethod).parameters.get(identifier);
+            if( identifierType != null)
+                return identifierType;
+        }
+
+        // Get type from class's field
+        identifierType = symboltable.classRecord.get(currentClass).variables.get(identifier);
+        if(identifierType != null)
+            return identifierType;
+
+        identifierType = SearchAncestors(currentClass, identifier);
+        if(identifierType != "")
+            return identifierType;
+
+        return "error";
+    }
+
+    // This function checks if the types given for the assignment are compatible
+    // e.g. int x = 5; -> allow it
+    //      String x = 5; -> do not allow it
+    public boolean checkAssignmentStatement(String identifier, String expression)
+    {
+        String identifierType = FindIdentifier(identifier);
+
+        // Direct type match
+        if(identifierType.equals(expression))
+            return true;
+
+        // If the expression is a class, check if it's a subclass of identifierType
+        if(symboltable.classRecord.containsKey(expression))
+        {
+            String parentClass = symboltable.classRecord.get(expression).extendsFrom;
+            while(parentClass != null && !parentClass.equals(""))
+            {
+                if(parentClass.equals(identifierType))
+                    return true;
+
+                parentClass = symboltable.classRecord.get(parentClass).extendsFrom;
+            }
+        }
+
+        throw new RuntimeException("This: " + identifier + " and this one: " + expression + " are not compatible for assignent.");
+    }
+
     // This function checks if the type given is of correct form
+    public String checkExpression(String expression)
+    {
+        String typeOfExpression = null;
+
+        // if expression is this then it refers to current class
+        if(expression == "this")
+            typeOfExpression = currentClass;
+        // if expression returns a string starting with "/", then a new allocation expression occured of type /<type>
+        else if(expression.startsWith("/"))
+            typeOfExpression = expression.substring(1); 
+        // if expression returns an identifier
+        else if( !expression.startsWith("/") && expression != "int" && expression != "boolean" && expression != "int array" && !(symboltable.classRecord.containsKey(expression)))
+            typeOfExpression = FindIdentifier(expression);
+        
+        return typeOfExpression;
+    }
+
+
+
+
+
+    // This function checks if the type given is in correct form
     public boolean checkType(String type)
     {
         // check if type is one of the classes declared
