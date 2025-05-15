@@ -1,6 +1,8 @@
 
 import java.util.*;
 import SymbolTableBuilders.*;
+import syntaxtree.AndExpression;
+import syntaxtree.PlusExpression;
 
 // A .java file that implements the function checkers
 // For everything we encounter in our progra
@@ -169,10 +171,10 @@ public class Checker
         throw new RuntimeException("This: " + identifier + " and this one: " + expression + " are not compatible for assignent.");
     }
 
-    // This function checks if the type given is of correct form
+    // This function returns the expression's type
     public String checkExpression(String expression)
     {
-        String typeOfExpression = null;
+        String typeOfExpression = expression;
 
         // if expression is this then it refers to current class
         if(expression == "this")
@@ -186,6 +188,64 @@ public class Checker
         
         return typeOfExpression;
     }
+
+    // Check if the clause given is boolean
+    public void IsClauseBoolean(String clause)
+    {
+        String clauseType = FindIdentifier(clause);
+
+        if(clauseType != "boolean")
+            throw new RuntimeException("Clause: " + clause + " in method " + currentMethod + " of class " + currentClass + " isn't a boolean.");
+    }
+
+    // This function checks if the AND expression is correct
+    public void checkAndExpression(String firstClause, String secondClause)
+    {
+        // Check first variable
+        if(firstClause == "int" || firstClause == "this" || firstClause == "int array" || firstClause.startsWith("/") || symboltable.classRecord.containsKey(firstClause))
+            throw new RuntimeException("Invalid AND operation in class: " + currentClass + " of method: " + currentMethod + ", first clause must be of type boolean");
+        
+        if(firstClause != "boolean")
+            IsClauseBoolean(firstClause);
+        
+        // Check second variable
+        if(secondClause == "int" || secondClause == "this" || secondClause == "int array" || secondClause.startsWith("/") || symboltable.classRecord.containsKey(secondClause))
+            throw new RuntimeException("Invalid AND operation in class " + currentClass + " of method " + currentMethod + ", second clause must be of type boolean");
+        
+        if(secondClause != "boolean")
+            IsClauseBoolean(secondClause);
+    }
+
+    // Check if the primary expression given is int
+    public void IsPrimaryExprInt(String primaryExpr)
+    {
+        String primaryExprType = FindIdentifier(primaryExpr);
+
+        if(primaryExprType != "int")
+            throw new RuntimeException("Clause: " + primaryExpr + " in method " + currentMethod + " of class " + currentClass + " isn't an int.");
+    }
+
+    // This function checks if the primary expression given is able of arithmetic operations
+    public void checkPrimaryExpression(String firstPrimaryExpr, String secondPrimaryExpr)
+    {
+        // Check first variable
+        if(firstPrimaryExpr == "boolean" || firstPrimaryExpr == "this" || firstPrimaryExpr == "int array" || firstPrimaryExpr.startsWith("/") || symboltable.classRecord.containsKey(firstPrimaryExpr))
+            throw new RuntimeException("Invalid AND operation in class: " + currentClass + " of method: " + currentMethod + ", first primary expression must be of type int");
+        
+        if(firstPrimaryExpr != "int")
+            IsPrimaryExprInt(firstPrimaryExpr);
+        
+        // Check second variable
+        if(secondPrimaryExpr == "boolean" || secondPrimaryExpr == "this" || secondPrimaryExpr == "int array" || secondPrimaryExpr.startsWith("/") || symboltable.classRecord.containsKey(secondPrimaryExpr))
+            throw new RuntimeException("Invalid AND operation in class " + currentClass + " of method " + currentMethod + ", second primary expression must be of type int");
+        
+        if(secondPrimaryExpr != "int")
+            IsPrimaryExprInt(secondPrimaryExpr);
+    }
+
+
+
+    
 
 
 

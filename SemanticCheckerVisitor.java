@@ -116,15 +116,137 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
         }
     }
 
+    /**
+    * f0 -> Clause()
+    * f1 -> "&&"
+    * f2 -> Clause()
+    */
+    @Override
+    public String visit(AndExpression n, String argu)
+    {
+        try
+        {
+            String firstClause = n.f0.accept(this,null);
+            String secondClause = n.f2.accept(this,null);
+
+            checker.checkAndExpression(firstClause, secondClause);
+
+            // Return the clause's types
+            return "boolean";
+        }
+        catch (Exception e)
+        {
+            System.err.println("Exception thrown in AndExpression: " + e.getMessage());
+            return null;
+        }   
+    }
+
+   /**
+    * f0 -> PrimaryExpression()
+    * f1 -> "<"
+    * f2 -> PrimaryExpression()
+    */
+    @Override
+    public String visit(CompareExpression n, String argu)
+    {
+        try
+        {
+            String firstPrimaryExpr = n.f0.accept(this,null);
+            String secondPrimaryExpr = n.f2.accept(this,null);
+
+            checker.checkPrimaryExpression(firstPrimaryExpr, secondPrimaryExpr);
+            
+            return "Check CompareExpression";
+        }
+        catch (Exception e)
+        {
+            System.err.println("Exception thrown in CompareExpression: " + e.getMessage());
+            return null;
+        }  
+    }
+
+    /**
+    * f0 -> PrimaryExpression()
+    * f1 -> "+"
+    * f2 -> PrimaryExpression()
+    */
+    @Override
+    public String visit(PlusExpression n, String argu)
+    {
+        try
+        {
+            String firstPrimaryExpr = n.f0.accept(this,null);
+            String secondPrimaryExpr = n.f2.accept(this,null);
+
+            checker.checkPrimaryExpression(firstPrimaryExpr, secondPrimaryExpr);
+            
+            return "Check PlusExpression";
+        }
+        catch (Exception e)
+        {
+            System.err.println("Exception thrown in PlusExpression: " + e.getMessage());
+            return null;
+        }  
+    }
+
+    /**
+    * f0 -> PrimaryExpression()
+    * f1 -> "-"
+    * f2 -> PrimaryExpression()
+    */
+    @Override
+    public String visit(MinusExpression n, String argu)
+    {
+        try
+        {
+            String firstPrimaryExpr = n.f0.accept(this,null);
+            String secondPrimaryExpr = n.f2.accept(this,null);
+
+            checker.checkPrimaryExpression(firstPrimaryExpr, secondPrimaryExpr);
+            
+            return "Check MinusExpression";
+        }
+        catch (Exception e)
+        {
+            System.err.println("Exception thrown in MinusExpression: " + e.getMessage());
+            return null;
+        }  
+    }
+
+    /**
+     * f0 -> PrimaryExpression()
+    * f1 -> "*"
+    * f2 -> PrimaryExpression()
+    */
+    @Override
+    public String visit(TimesExpression n, String argu)
+    {
+        try
+        {
+            String firstPrimaryExpr = n.f0.accept(this,null);
+            String secondPrimaryExpr = n.f2.accept(this,null);
+
+            checker.checkPrimaryExpression(firstPrimaryExpr, secondPrimaryExpr);
+            
+            return "Check TimesExpression";
+        }
+        catch (Exception e)
+        {
+            System.err.println("Exception thrown in TimesExpression: " + e.getMessage());
+            return null;
+        }  
+    }
 
 
+
+    
 
 
     
     // I will not override the Type and the ArrayType as well -> eventualy I need the Type
     // So, now we override the Type so that we will be able to recognise a semantic error
 
-   /**
+    /**
     * f0 -> ArrayType()
     *       | BooleanType()
     *       | IntegerType()
@@ -167,11 +289,11 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
         }
     }
   
-     /**
-      * f0 -> "int"
-      * f1 -> "["
-      * f2 -> "]"
-      */
+    /**
+    * f0 -> "int"
+    * f1 -> "["
+    * f2 -> "]"
+    */
     @Override
     public String visit(IntegerArrayType n, String argu) 
     {
@@ -208,7 +330,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     }
 
     /**
-     * f0 -> "int"
+    * f0 -> "int"
     */
     @Override
     public String visit(IntegerType n, String argu)
@@ -257,7 +379,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     }
 
     /**
-     * f0 -> "false"
+    * f0 -> "false"
     */
     @Override
     public String visit(FalseLiteral n, String argu)
@@ -266,7 +388,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     }
 
     /**
-     * f0 -> "this"
+    * f0 -> "this"
     */
     @Override
     public String visit(ThisExpression n, String argu)
