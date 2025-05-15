@@ -318,6 +318,95 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
         }
     }
 
+    /**
+    * f0 -> "!"
+    * f1 -> Clause()
+    */
+    @Override
+    public String visit(NotExpression n, String argu)
+    {
+        try
+        {
+            String clause = n.f1.accept(this,null);
+            checker.checkNotOperation(clause);
+            return "boolean";
+        }
+        catch (Exception e)
+        {
+            System.err.println("Exception thrown in NotExpression: " + e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+    * f0 -> BooleanArrayAllocationExpression()
+    *       | IntegerArrayAllocationExpression()
+    */
+    @Override
+    public String visit(ArrayAllocationExpression n, String argu)
+    {
+        try
+        {
+            String expr = n.f0.accept(this,null);
+
+            return checker.checkArrayAllocationExpression(expr);;
+        }
+        catch (Exception e)
+        {
+            System.err.println("Exception thrown in ArrayAllocationExpression: " + e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+    * f0 -> "new"
+    * f1 -> Identifier()
+    * f2 -> "("
+    * f3 -> ")"
+    */
+    @Override
+    public String visit(AllocationExpression n, String argu)
+    {
+        try
+        {
+            String className = n.f1.accept(this,null);
+
+            checker.checkClass(className);
+            
+            // add special characters, so we can now that a primary expression if an allocation expression
+            return "/" + className;
+        }
+        catch (Exception e)
+        {
+            System.err.println("Exception thrown in AllocationExpression: " + e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+    * f0 -> "("
+    * f1 -> Expression()
+    * f2 -> ")"
+    */
+    @Override
+    public String visit(BracketExpression n, String argu)
+    {
+        try
+        {
+            // Visits expression
+            String expression = n.f1.accept(this,null);
+
+            return expression;
+
+            // So no need for that after all!
+            // return checker.checkExpression(expression);
+        }
+        catch (Exception e)
+        {
+            System.err.println("Exception thrown in BracketExpression: " + e.getMessage());
+            return null;
+        }
+    }
 
 
 
@@ -327,7 +416,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
 
     
     // I will not override the Type and the ArrayType as well -> eventualy I need the Type
-    // So, now we override the Type so that we will be able to recognise a semantic error
+    // Eventually, we need to override the Type so that we will be able to recognise a semantic error
 
     /**
     * f0 -> ArrayType()

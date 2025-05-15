@@ -54,6 +54,17 @@ public class Checker
         throw new RuntimeException("The class: " + currentClass + " has not been declared in the program");
     }
 
+    // Second function to see if a class has been declared inside our program
+    public boolean checkClass(String className)
+    {
+        if(symboltable.classRecord.containsKey(className))
+        {
+            return true;
+        }
+        
+        throw new RuntimeException("The class: " + className + " has not been declared in the program");
+    }
+
     // This function checks if the currentMethod exists in our symbol table
     // Maybe bollean 0 -> it does not exist, 1 -> it exists
     public boolean checkExistingMethod()
@@ -414,8 +425,24 @@ public class Checker
         return type;
     }
 
+    // This function checks if the not expression is in correct form
+    public void checkNotOperation(String clause)
+    {
+        if(symboltable.classRecord.containsKey(clause) || clause.startsWith("/") || clause.equals("this") || clause.equals("boolean[]") || clause.equals("int[]") || clause.equals("int"))
+            throw new RuntimeException("This type: " + clause + " is non boolean that the NotExpression requires.");
+        
+        if(!(clause.equals("boolean")))
+            isClauseBoolean(clause);
+    }
 
-
+    // This function checks if the type of the array is int or boolean
+    public String checkArrayAllocationExpression(String arrayType)
+    {
+        if(arrayType.equals("int[]") || arrayType.equals("boolean[]"))
+            return arrayType;
+        
+        throw new RuntimeException("This type: " + arrayType + " is not acceptable for an array.");
+    }
 
 
 
