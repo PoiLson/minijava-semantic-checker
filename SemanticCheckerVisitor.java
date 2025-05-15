@@ -6,6 +6,8 @@ import java.util.Stack;
 
 import SymbolTableBuilders.*;
 
+
+// Each visitor method returns the type as a String, like "int", "boolean", "int[]", etc.
 class SemanticCheckerVisitor extends GJDepthFirst <String, String>
 {
     Checker checker;
@@ -349,11 +351,67 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
         {
             String expr = n.f0.accept(this,null);
 
-            return checker.checkArrayAllocationExpression(expr);;
+            return checker.checkArrayAllocationExpression(expr);
         }
         catch (Exception e)
         {
             System.err.println("Exception thrown in ArrayAllocationExpression: " + e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+    * f0 -> "new"
+    * f1 -> "boolean"
+    * f2 -> "["
+    * f3 -> Expression()
+    * f4 -> "]"
+    */
+    @Override
+    public String visit(BooleanArrayAllocationExpression n, String argu)
+    {
+        try
+        {
+            String expressionType = n.f3.accept(this, null);
+
+            if (!expressionType.equals("boolean"))
+            {
+                throw new RuntimeException("Invalid size in 'new boolean[]'. Size must be of type boolean, but got: " + expressionType);
+            }
+
+            return "boolean[]";
+        }
+        catch (Exception e)
+        {
+            System.err.println("Exception thrown in BooleanArrayAllocationExpression: " + e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+    * f0 -> "new"
+    * f1 -> "int"
+    * f2 -> "["
+    * f3 -> Expression()
+    * f4 -> "]"
+    */
+    @Override
+    public String visit(IntegerArrayAllocationExpression n, String argu)
+    {
+        try
+        {
+            String expressionType = n.f3.accept(this, null);
+
+            if (!expressionType.equals("int"))
+            {
+                throw new RuntimeException("Invalid size in 'new int[]'. Size must be of type int, but got: " + expressionType);
+            }
+
+            return "int[]";
+        }
+        catch (Exception e)
+        {
+            System.err.println("Exception thrown in IntegerArrayAllocationExpression: " + e.getMessage());
             return null;
         }
     }
@@ -407,6 +465,40 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
             return null;
         }
     }
+
+    /**
+    * f0 -> Identifier()
+    * f1 -> "["
+    * f2 -> Expression()
+    * f3 -> "]"
+    * f4 -> "="
+    * f5 -> Expression()
+    * f6 -> ";"
+    */
+    @Override
+    public String visit(ArrayAssignmentStatement n, String argu)
+    {
+        try
+        {
+            String arrName = n.f0.accept(this,null);
+            String typeOfIndex = n.f2.accept(this,null);
+            String typeOfExpr = n.f5.accept(this,null);
+            
+            checker.checkArrayAssignmentStatement(arrName, typeOfIndex, typeOfExpr);
+            return "Check ArrayAssignmentStatement";
+        }
+        catch (Exception e)
+        {
+            System.err.println("Exception thrown in ArrayAssignmentStatement: " + e.getMessage());
+            return null;
+        }
+    }
+
+
+
+
+
+
 
 
 

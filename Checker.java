@@ -1,11 +1,9 @@
 
 import java.util.*;
 import SymbolTableBuilders.*;
-import syntaxtree.AndExpression;
-import syntaxtree.PlusExpression;
 
 // A .java file that implements the function checkers
-// For everything we encounter in our progra
+// For everything we encounter in our program
 // Functions, types, parameters, etc.
 
 public class Checker
@@ -443,6 +441,22 @@ public class Checker
         
         throw new RuntimeException("This type: " + arrayType + " is not acceptable for an array.");
     }
+
+    // This function checks if the type of the array is int or boolean
+    public String checkArrayAssignmentStatement(String arrName, String typeOfIndex, String typeOfExpr)
+    {
+        isIdentifierDeclared(arrName);
+        isArrNameValid(arrName);
+
+        if(typeOfIndex != "int" || typeOfIndex != "boolean")
+            throw new RuntimeException("This type: " + arrayType + " is not acceptable for an array.");
+   
+        if(typeOfExpr != "int" || typeOfExpr != "boolean")
+            throw new RuntimeException("This type: " + arrayType + " is not acceptable for an array.");
+   
+    }
+
+
 
 
 
