@@ -881,8 +881,6 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
         checker.setCurrentClass(className);
         checker.setCurrentMethod("");
 
-        System.out.println(className);
-
         // Visit VarDeclaration
         n.f3.accept(this,null);
 

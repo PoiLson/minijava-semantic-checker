@@ -10,7 +10,7 @@ compile:
 run:
 # Run the Main class, specifying the classpath to the compiled classes directory
 	clear
-	java Main ./FileInputs/TestScopes.java
+	java Main ./FileInputs/Tests.java
 
 clean:
 	rm -rf *.class syntaxtree visitor minijava-jtb.jj *~
