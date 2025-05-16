@@ -1,4 +1,3 @@
-
 import java.util.*;
 import SymbolTableBuilders.*;
 
@@ -9,8 +8,8 @@ import SymbolTableBuilders.*;
 public class Checker
 {
     public SymbolTable symboltable;
-    String currentClass="";
-    String currentMethod="";
+    String currentClass = "";
+    String currentMethod = "";
 
     // Constructor
     public Checker(SymbolTable symboltable)
@@ -442,19 +441,66 @@ public class Checker
         throw new RuntimeException("This type: " + arrayType + " is not acceptable for an array.");
     }
 
-    // This function checks if the type of the array is int or boolean
-    public String checkArrayAssignmentStatement(String arrName, String typeOfIndex, String typeOfExpr)
+    // This function checks if the type of the array and its index and expression are of the correct type
+    public void checkArrayAssignmentStatement(String arrType, String typeOfIndex, String typeOfExpr)
     {
-        isIdentifierDeclared(arrName);
-        isArrNameValid(arrName);
+        isIdentifierDeclared(arrType);
+        isArrNameValid(arrType);
 
-        if(typeOfIndex != "int" || typeOfIndex != "boolean")
-            throw new RuntimeException("This type: " + arrayType + " is not acceptable for an array.");
+        // First of all, index of the array must be of type int, so:
+        if(!typeOfIndex.equals("int"))
+            throw new RuntimeException("The type of index is not an int as expected, it is a: " + typeOfIndex);
    
-        if(typeOfExpr != "int" || typeOfExpr != "boolean")
-            throw new RuntimeException("This type: " + arrayType + " is not acceptable for an array.");
-   
+        // If expression is not int or booolean throw right away a runtime exception
+        if(!(typeOfExpr.equals("int") || typeOfExpr.equals("boolean")))
+            throw new RuntimeException("The type of index and the type of the expression are incompatible, typeOfIndex: " + typeOfIndex + " and type of expression: " + typeOfExpr);
+
+        // The type of tha array and the type of the expression must be of the same type, or int or boolean
+        if(arrType.equals("int[]") && !(typeOfExpr.equals("int")))
+            throw new RuntimeException("The array is of type int and the expression is of type: " + typeOfExpr);
+        
+        if(arrType.equals("boolean[]") && !(typeOfExpr.equals("boolean")))
+            throw new RuntimeException("The array is of type boolean and the expression is of type: " + typeOfExpr);
     }
+
+    // Function to check if the condition statement for if and while is boolean
+    public void checkConditionStatement(String expressionType)
+    {
+        if(!(expressionType.equals(expressionType)))
+            throw new RuntimeException("The expression type in the while statement is not boolean, it is: " + expressionType);
+    }
+
+    // Function to check if the expression is printable, meaning if it is a boolean or an int
+    public void checkPrintStatement(String expressionType)
+    {
+        if(expressionType == null || !((expressionType.equals("int")) || (expressionType.equals("boolean"))))
+            throw new RuntimeException("The expression type in the print statement is not printable (boolean or int), it is: " + expressionType);
+    }
+
+    // Check if expression's return type is the same as method's declared one
+    public void checkReturnType(String returnType)
+    {
+        String declaredType = symboltable.classRecord.get(currentClass).functions.get(currentMethod).returnType;
+        if(!(declaredType.equals(returnType)))
+        {
+            if(!(symboltable.classRecord.containsKey(returnType)))
+                throw new RuntimeException("Method " + currentMethod + " in class " + currentClass + " is trying to return a type " + returnType + " , while it expects a type " + declaredType);
+            
+            String parentClass = symboltable.classRecord.get(returnType).extendsFrom;
+
+            while(parentClass != "")
+            {
+                if(parentClass.equals(declaredType))
+                    return;
+
+                parentClass = symboltable.classRecord.get(parentClass).extendsFrom;
+            }
+
+            throw new RuntimeException("Method " + currentMethod + " in class " + currentClass + " is trying to return a type " + returnType + " , while it expects a type " + declaredType);
+        }
+    }
+
+
 
 
 
@@ -506,10 +552,9 @@ public class Checker
     // This function checks if the type given is integer
     public boolean checkIntegerType(String type)
     {
-        if(type == "int")
+        if(type.equals("int"))
             return true;
         
         throw new RuntimeException("Was expecting int instead of: " + type );
     }
-
 }

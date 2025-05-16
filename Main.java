@@ -5,7 +5,7 @@ import java.io.IOException;
 import syntaxtree.*;
 
 public class Main {
-    public static void main(String[] args)
+    public static void main(String[] args) throws RuntimeException
     {
         if(args.length < 1)
         {

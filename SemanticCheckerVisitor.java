@@ -14,13 +14,20 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
 
     // We need a stack to store the
     // Argument type lists for nested method calls
-    Stack <ArrayList <String> > parameters;
+    Stack <ArrayList <String> > methodCalls;
 
     // Constructor
     public SemanticCheckerVisitor(SymbolTable symbolTable)
     {
         // Pass the symbol table to our semantic checker
         checker = new Checker(symbolTable);
+    }
+
+    // Override one of the visitors functions
+    // Not the user ones
+    public String visit(NodeToken n, String argu)
+    {
+        return n.toString();
     }
 
     // Now we can use our checker to check for semantic errors
@@ -301,7 +308,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
         try
         {
             // Collect the types of the arguments of this method call
-            parameters.push(new ArrayList<String>());
+            methodCalls.push(new ArrayList<String>());
 
             String caller = n.f0.accept(this,null);
             String method = n.f2.accept(this,null);
@@ -309,7 +316,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
             // Visit EpxressionList
             n.f4.accept(this,null);
 
-            String methodType = checker.checkMessageSend(caller, method, parameters.pop());
+            String methodType = checker.checkMessageSend(caller, method, methodCalls.pop());
 
             return methodType;
         }
@@ -480,11 +487,11 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     {
         try
         {
-            String arrName = n.f0.accept(this,null);
+            String arrType = n.f0.accept(this,null);
             String typeOfIndex = n.f2.accept(this,null);
             String typeOfExpr = n.f5.accept(this,null);
             
-            checker.checkArrayAssignmentStatement(arrName, typeOfIndex, typeOfExpr);
+            checker.checkArrayAssignmentStatement(arrType, typeOfIndex, typeOfExpr);
             return "Check ArrayAssignmentStatement";
         }
         catch (Exception e)
@@ -494,12 +501,261 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
         }
     }
 
+    /**
+    * f0 -> "if"
+    * f1 -> "("
+    * f2 -> Expression()
+    * f3 -> ")"
+    * f4 -> Statement()
+    * f5 -> "else"
+    * f6 -> Statement()
+    */
+    @Override
+    public String visit(IfStatement n, String argu)
+    {
+        try
+        {
+            // Visit expression and get its type back
+            String expressionType = n.f2.accept(this,null);
+
+            // Check if it is boolean
+            checker.checkConditionStatement(expressionType);
+
+            // Visit statement of if
+            n.f4.accept(this,null);
+
+            // Visit statement of else
+            n.f6.accept(this,null);
+
+            return "Check IfStatement";
+        }
+        catch (Exception e)
+        {
+            System.err.println("Exception thrown in IfStatement: " + e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+    * f0 -> "while"
+    * f1 -> "("
+    * f2 -> Expression()
+    * f3 -> ")"
+    * f4 -> Statement()
+    */
+    @Override
+    public String visit(WhileStatement n, String argu)
+    {
+        try
+        {
+            // Visit expression and get its type back
+            String expressionType = n.f2.accept(this,null);
+
+            // Check if it is boolean
+            checker.checkConditionStatement(expressionType);
+
+            // Visit statement of while
+            n.f4.accept(this,null);
+            
+            return "Check WhileStatement";
+        }
+        catch (Exception e)
+        {
+            System.err.println("Exception thrown in WhileStatement: " + e.getMessage());
+            return null;
+        }
+    }
+  
+    /**
+    * f0 -> "System.out.println"
+    * f1 -> "("
+    * f2 -> Expression()
+    * f3 -> ")"
+    * f4 -> ";"
+    */
+    @Override
+    public String visit(PrintStatement n, String argu)
+    {
+        try
+        {
+            // Visit expression and get its type back
+            String expressionType = n.f2.accept(this,null);
+
+            // Check if it is boolean or int
+            checker.checkPrintStatement(expressionType);
+            
+            return "Check PrintStatement";
+        }
+        catch (Exception e)
+        {
+            System.err.println("Exception thrown in PrintStatement: " + e.getMessage());
+            return null;
+        }
+    }
+  
+    /**
+    * f0 -> Expression()
+    * f1 -> ExpressionTail()
+    */
+    @Override
+    public String visit(ExpressionList n, String argu)
+    {
+        try
+        {
+            String firstParameter = n.f0.accept(this,argu);
+            methodCalls.peek().add(firstParameter);
+
+            // Visit ExpressionTail
+            n.f1.accept(this,null);
+
+            return "Check ExpressionList";
+        }
+        catch (Exception e)
+        {
+            System.err.println("Exception thrown in ExpressionList: " + e.getMessage());
+            return null;
+        }
+    }
+  
+    /**
+    * f0 -> ","
+    * f1 -> Expression()
+    */
+    @Override
+    public String visit(ExpressionTerm n, String argu)
+    {
+        try
+        {
+            String parameter = n.f1.accept(this,argu);
+            methodCalls.peek().add(parameter);
+
+            return "Check ExpressionTerm";
+        }
+        catch (Exception e)
+        {
+            System.err.println("Exception thrown in ExpressionTerm: " + e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+    * f0 -> "class"
+    * f1 -> Identifier()
+    * f2 -> "{"
+    * f3 -> ( VarDeclaration() )*
+    * f4 -> ( MethodDeclaration() )*
+    * f5 -> "}"
+    */
+    @Override
+    public String visit(ClassDeclaration n, String argu)
+    {
+        try
+        {
+            String className = n.f1.accept(this,null);
+            checker.setCurrentClass(className);
+            checker.setCurrentMethod("");
+
+            // Visit VarDeclaration
+            n.f3.accept(this,null);
+
+            // Visit MethodDeclaration
+            n.f4.accept(this,null);
+
+            return "Check ClassDeclaration";
+        }
+        catch (Exception e)
+        {
+            System.err.println("Exception thrown in ClassDeclaration: " + e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+    * f0 -> "public"
+    * f1 -> Type()
+    * f2 -> Identifier()
+    * f3 -> "("
+    * f4 -> ( FormalParameterList() )?
+    * f5 -> ")"
+    * f6 -> "{"
+    * f7 -> ( VarDeclaration() )*
+    * f8 -> ( Statement() )*
+    * f9 -> "return"
+    * f10 -> Expression()
+    * f11 -> ";"
+    * f12 -> "}"
+    */
+    @Override
+    public String visit(MethodDeclaration n, String argu)
+    {
+        try
+        {
+            String methodName = n.f2.accept(this,null);
+            checker.setCurrentMethod(methodName);
+
+            // Visit Type
+            n.f1.accept(this,null);
+
+            // Visit FormalParameterList
+            n.f4.accept(this,null);
+
+            // Visit VarDeclaration
+            n.f7.accept(this,null);
+
+            // Visit Statement
+            n.f8.accept(this,null);
+
+            // Visit Return Expression
+            String returnType = n.f10.accept(this,null);
+            checker.checkReturnType(returnType);
+
+            return "Check MethodDeclaration";
+        }
+        catch (Exception e)
+        {
+            System.err.println("Exception thrown in MethodDeclaration: " + e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+    * f0 -> "class"
+    * f1 -> Identifier()
+    * f2 -> "extends"
+    * f3 -> Identifier()
+    * f4 -> "{"
+    * f5 -> ( VarDeclaration() )*
+    * f6 -> ( MethodDeclaration() )*
+    * f7 -> "}"
+    */
+    @Override
+    public String visit(ClassExtendsDeclaration n, String argu)
+    {
+        try
+        {
+            String className = n.f1.accept(this,null);
+            checker.setCurrentClass(className);
+            checker.setCurrentMethod("");
+
+            // Visit VarDeclaration
+            n.f5.accept(this,null);
+
+            // Visit MethodDeclaration
+            n.f6.accept(this,null);
+
+            return "Check ClassExtendsDeclaration";
+        }
+        catch (Exception e)
+        {
+            System.err.println("Exception thrown in ClassExtendsDeclaration: " + e.getMessage());
+            return null;
+        }
+    }
 
 
 
 
-
-
+    
 
 
 
@@ -522,6 +778,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
         try
         {
             String type = n.f0.accept(this,null);
+            System.out.println(type);
             checker.checkType(type);
             return "Check Type";
         }
@@ -601,15 +858,18 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     {
         try
         {
-            String type = n.f0.accept(this,null);
+            String type = n.f0.accept(this,argu);
+            System.out.println(type);
             checker.checkIntegerType(type);
-            return "Check IntegerType";
+            return type;
         }
         catch (Exception e)
         {
             System.err.println("Exception thrown in IntegerType: " + e.getMessage());
             return null;
         }
+
+        // return n.f0.toString();
     }
 
     // AT THE END RE-OVERRIDE THE FUNCTIONS THAT GIVE TERMINAL SYMBOLS!!
