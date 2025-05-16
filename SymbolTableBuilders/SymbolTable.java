@@ -18,7 +18,7 @@ public class SymbolTable
   {
     // throw error if the class is already declared inside the program
     if(classRecord.containsKey(name))
-      throw new RuntimeException("The class: " + name + " has already been declared!\n");
+      throw new RuntimeException("The class: " + name + ", has already been declared!\n");
 
     // if class extends from another class, which is called parent class
     if(info.extendsFrom != "")

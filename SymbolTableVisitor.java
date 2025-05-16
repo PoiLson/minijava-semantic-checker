@@ -35,40 +35,65 @@ public class SymbolTableVisitor extends GJDepthFirst <String,String>
    * f17 -> "}"
    */
   @Override
-  public String visit(MainClass n, String argu)
+  public String visit(MainClass n, String argu) throws Exception
   {
-    try
-    {
-      // Take all the important info to store the class
-      // Inside of the symbol table
-      String MainClassName = n.f1.accept(this,null);
-      String MainArg = n.f11.accept(this,null);
-      String MainName = "main";
+    // try
+    // {
+    //   // Take all the important info to store the class
+    //   // Inside of the symbol table
+    //   String MainClassName = n.f1.accept(this,null);
+    //   String MainArg = n.f11.accept(this,null);
+    //   String MainName = "main";
 
-      currentClass = MainClassName;
-      currentFunction = MainName;
+    //   currentClass = MainClassName;
+    //   currentFunction = MainName;
 
-      ClassData MainClassInfo = new ClassData();
-      MainClassInfo.name = MainClassName;
+    //   ClassData MainClassInfo = new ClassData();
+    //   MainClassInfo.name = MainClassName;
 
-      FunctionData MainFunctionInfo = new FunctionData();
-      MainFunctionInfo.name = MainName;
-      MainFunctionInfo.returnType = "void";
+    //   FunctionData MainFunctionInfo = new FunctionData();
+    //   MainFunctionInfo.name = MainName;
+    //   MainFunctionInfo.returnType = "void";
 
-      MainFunctionInfo.addParameter(MainArg,"String Array");
-      MainClassInfo.addFunction(MainName,MainFunctionInfo);
-      symbolTable.addClass(MainClassName,MainClassInfo);
+    //   MainFunctionInfo.addParameter(MainArg,"String Array");
+    //   MainClassInfo.addFunction(MainName,MainFunctionInfo);
+    //   symbolTable.addClass(MainClassName,MainClassInfo);
       
-      // Visit Var Declaration
-      n.f14.accept(this,null);
+    //   // Visit Var Declaration
+    //   n.f14.accept(this,null);
 
-      return "MainClass";
-    }
-    catch (Exception e)
-    {
-      System.err.println("Exception thrown in MainClass: " + e.getMessage());
-      return null;
-    }
+    //   return "MainClass";
+    // }
+    // catch (Exception e)
+    // {
+    //   System.err.println("Exception thrown in MainClass: " + e.getMessage());
+    //   return null;
+    // }
+
+    // Take all the important info to store the class
+    // Inside of the symbol table
+    String MainClassName = n.f1.accept(this,null);
+    String MainArg = n.f11.accept(this,null);
+    String MainName = "main";
+
+    currentClass = MainClassName;
+    currentFunction = MainName;
+
+    ClassData MainClassInfo = new ClassData();
+    MainClassInfo.name = MainClassName;
+
+    FunctionData MainFunctionInfo = new FunctionData();
+    MainFunctionInfo.name = MainName;
+    MainFunctionInfo.returnType = "void";
+
+    MainFunctionInfo.addParameter(MainArg,"String Array");
+    MainClassInfo.addFunction(MainName,MainFunctionInfo);
+    symbolTable.addClass(MainClassName,MainClassInfo);
+    
+    // Visit Var Declaration
+    n.f14.accept(this,null);
+
+    return "MainClass";
   }
 
   /**
@@ -80,32 +105,49 @@ public class SymbolTableVisitor extends GJDepthFirst <String,String>
    * f5 -> "}"
    */
   @Override
-  public String visit(ClassDeclaration n,String argu)
+  public String visit(ClassDeclaration n,String argu) throws Exception
   {
-    try
-    {
-      String className = n.f1.accept(this,null);
-      ClassData classInfo = new ClassData();
+    // try
+    // {
+    //   String className = n.f1.accept(this,null);
+    //   ClassData classInfo = new ClassData();
 
-      currentClass = className;
-      currentFunction = "";
-      classInfo.name = currentClass;
+    //   currentClass = className;
+    //   currentFunction = "";
+    //   classInfo.name = currentClass;
 
-      symbolTable.addClass(className,classInfo);
+    //   symbolTable.addClass(className,classInfo);
 
-      // Visit VarDeclaration
-      n.f3.accept(this,null);
+    //   // Visit VarDeclaration
+    //   n.f3.accept(this,null);
 
-      // Visit Function Declaration
-      n.f4.accept(this,null);
+    //   // Visit Function Declaration
+    //   n.f4.accept(this,null);
 
-      return "ClassDeclaration";
-    }
-    catch (Exception e)
-    {
-      System.err.println("Exception thrown in ClassDeclaration: " + e.getMessage());
-      return null;
-    }
+    //   return "ClassDeclaration";
+    // }
+    // catch (Exception e)
+    // {
+    //   System.err.println("Exception thrown in ClassDeclaration: " + e.getMessage());
+    //   return null;
+    // }
+
+    String className = n.f1.accept(this,null);
+    ClassData classInfo = new ClassData();
+
+    currentClass = className;
+    currentFunction = "";
+    classInfo.name = currentClass;
+
+    symbolTable.addClass(className,classInfo);
+
+    // Visit VarDeclaration
+    n.f3.accept(this,null);
+
+    // Visit Function Declaration
+    n.f4.accept(this,null);
+
+    return "ClassDeclaration";
   }
 
   /**
@@ -119,34 +161,53 @@ public class SymbolTableVisitor extends GJDepthFirst <String,String>
    * f7 -> "}"
    */
   @Override
-  public String visit(ClassExtendsDeclaration n,String argu)
+  public String visit(ClassExtendsDeclaration n,String argu) throws Exception
   {
-    try
-    {
-      String className = n.f1.accept(this,null);
-      String extendsfrom = n.f3.accept(this,null);
+    // try
+    // {
+    //   String className = n.f1.accept(this,null);
+    //   String extendsfrom = n.f3.accept(this,null);
 
-      ClassData classInfo = new ClassData();
-      currentClass = className;
-      currentFunction = "";
-      classInfo.extendsFrom = extendsfrom;
-      classInfo.name = currentClass;
+    //   ClassData classInfo = new ClassData();
+    //   currentClass = className;
+    //   currentFunction = "";
+    //   classInfo.extendsFrom = extendsfrom;
+    //   classInfo.name = currentClass;
 
-      symbolTable.addClass(className,classInfo);
+    //   symbolTable.addClass(className,classInfo);
 
-      // Visit VarDeclaration
-      n.f5.accept(this,null);
+    //   // Visit VarDeclaration
+    //   n.f5.accept(this,null);
 
-      // Visit Function Declaration
-      n.f6.accept(this,null);
+    //   // Visit Function Declaration
+    //   n.f6.accept(this,null);
 
-      return "ClassExtendsDeclaration";
-    }
-    catch (Exception e)
-    {
-      System.err.println("Exception thrown in ClassExtendsDeclaration: " + e.getMessage());
-      return null;
-    }
+    //   return "ClassExtendsDeclaration";
+    // }
+    // catch (Exception e)
+    // {
+    //   System.err.println("Exception thrown in ClassExtendsDeclaration: " + e.getMessage());
+    //   return null;
+    // }
+
+    String className = n.f1.accept(this,null);
+    String extendsfrom = n.f3.accept(this,null);
+
+    ClassData classInfo = new ClassData();
+    currentClass = className;
+    currentFunction = "";
+    classInfo.extendsFrom = extendsfrom;
+    classInfo.name = currentClass;
+
+    symbolTable.addClass(className,classInfo);
+
+    // Visit VarDeclaration
+    n.f5.accept(this,null);
+
+    // Visit Function Declaration
+    n.f6.accept(this,null);
+
+    return "ClassExtendsDeclaration";
   }
 
   /**
@@ -155,31 +216,47 @@ public class SymbolTableVisitor extends GJDepthFirst <String,String>
   * f2 -> ";"
   */
   @Override
-  public String visit(VarDeclaration n,String argu)
+  public String visit(VarDeclaration n,String argu) throws Exception
   {
-    try
-    {
-      String vartype = n.f0.accept(this,null);
-      String varname = n.f1.accept(this,null);
+    // try
+    // {
+    //   String vartype = n.f0.accept(this,null);
+    //   String varname = n.f1.accept(this,null);
 
-      if(currentFunction == "")
-      {
-        // Insert fields to class that belongs on symbol table
-        symbolTable.classRecord.get(currentClass).addVariable(varname,vartype);
-      }
-      else
-      {
-        // Insert fields to the function of the class that belongs on symbol table
-        symbolTable.classRecord.get(currentClass).functions.get(currentFunction).addLocalVariable(varname,vartype);
-      }
+    //   if(currentFunction == "")
+    //   {
+    //     // Insert fields to class that belongs on symbol table
+    //     symbolTable.classRecord.get(currentClass).addVariable(varname,vartype);
+    //   }
+    //   else
+    //   {
+    //     // Insert fields to the function of the class that belongs on symbol table
+    //     symbolTable.classRecord.get(currentClass).functions.get(currentFunction).addLocalVariable(varname,vartype);
+    //   }
 
-      return "VarDeclaration";
-    }
-    catch (Exception e)
+    //   return "VarDeclaration";
+    // }
+    // catch (Exception e)
+    // {
+    //   System.err.println("Exception thrown in VarDeclaration: " + e.getMessage());
+    //   return null;
+    // }
+
+    String vartype = n.f0.accept(this,null);
+    String varname = n.f1.accept(this,null);
+
+    if(currentFunction == "")
     {
-      System.err.println("Exception thrown in VarDeclaration: " + e.getMessage());
-      return null;
+      // Insert fields to class that belongs on symbol table
+      symbolTable.classRecord.get(currentClass).addVariable(varname,vartype);
     }
+    else
+    {
+      // Insert fields to the function of the class that belongs on symbol table
+      symbolTable.classRecord.get(currentClass).functions.get(currentFunction).addLocalVariable(varname,vartype);
+    }
+
+    return "VarDeclaration";
   }
    /**
    * f0 -> "public"
@@ -197,44 +274,74 @@ public class SymbolTableVisitor extends GJDepthFirst <String,String>
    * f12 -> "}"
    */
   @Override
-  public String visit(MethodDeclaration n,String argu)
+  public String visit(MethodDeclaration n,String argu) throws Exception
   {
-    try
+    // try
+    // {
+    //   String MethodType = n.f1.accept(this,null);
+    //   String MethodName = n.f2.accept(this,null);
+    //   currentFunction = MethodName;
+
+    //   FunctionData newFunction = new FunctionData();
+    //   newFunction.returnType = MethodType;
+    //   newFunction.name = MethodName;
+
+    //   // Add method to the current class' info
+    //   symbolTable.classRecord.get(currentClass).addFunction(MethodName,newFunction);
+
+    //   // Visit FormalParameterList
+    //   n.f4.accept(this,null);
+
+    //   // Before continuing, do a polymorph check
+    //   ClassData parentClass = null;
+    //   String parentClassName = symbolTable.classRecord.get(currentClass).extendsFrom;
+
+    //   if( parentClassName != "")
+    //   {
+    //     parentClass = symbolTable.classRecord.get(parentClassName);
+    //     symbolTable.classRecord.get(currentClass).validateOverriding(MethodName,parentClass);
+    //   }
+
+    //   // Visit VarDeclaration
+    //   n.f7.accept(this,null);
+
+    //   return "MethodDeclaration";
+    // }
+    // catch (Exception e)
+    // {
+    //   System.err.println("Exception thrown in MethodDeclaration: " + e.getMessage());
+    //   return null;
+    // }
+
+    String MethodType = n.f1.accept(this,null);
+    String MethodName = n.f2.accept(this,null);
+    currentFunction = MethodName;
+
+    FunctionData newFunction = new FunctionData();
+    newFunction.returnType = MethodType;
+    newFunction.name = MethodName;
+
+    // Add method to the current class' info
+    symbolTable.classRecord.get(currentClass).addFunction(MethodName,newFunction);
+
+    // Visit FormalParameterList
+    n.f4.accept(this,null);
+
+    // Before continuing, do a polymorph check
+    ClassData parentClass = null;
+    String parentClassName = symbolTable.classRecord.get(currentClass).extendsFrom;
+
+    if( parentClassName != "")
     {
-      String MethodType = n.f1.accept(this,null);
-      String MethodName = n.f2.accept(this,null);
-      currentFunction = MethodName;
-
-      FunctionData newFunction = new FunctionData();
-      newFunction.returnType = MethodType;
-      newFunction.name = MethodName;
-
-      // Add method to the current class' info
-      symbolTable.classRecord.get(currentClass).addFunction(MethodName,newFunction);
-
-      // Visit FormalParameterList
-      n.f4.accept(this,null);
-
-      // Before continuing, do a polymorph check
-      ClassData parentClass = null;
-      String parentClassName = symbolTable.classRecord.get(currentClass).extendsFrom;
-
-      if( parentClassName != "")
-      {
-        parentClass = symbolTable.classRecord.get(parentClassName);
-        symbolTable.classRecord.get(currentClass).validateOverriding(MethodName,parentClass);
-      }
-
-      // Visit VarDeclaration
-      n.f7.accept(this,null);
-
-      return "MethodDeclaration";
+      parentClass = symbolTable.classRecord.get(parentClassName);
+      symbolTable.classRecord.get(currentClass).validateOverriding(MethodName,parentClass);
     }
-    catch (Exception e)
-    {
-      System.err.println("Exception thrown in MethodDeclaration: " + e.getMessage());
-      return null;
-    }
+
+    // Visit VarDeclaration
+    n.f7.accept(this,null);
+
+    return "MethodDeclaration";
+  
   }
   
   /*
@@ -242,23 +349,31 @@ public class SymbolTableVisitor extends GJDepthFirst <String,String>
    * f1 -> Identifier()
    */
   @Override
-  public String visit(FormalParameter n, String argu)
+  public String visit(FormalParameter n, String argu) throws Exception
   {
-    try
-    {
-      String parameter_type = n.f0.accept(this,null);
-      String parameter_name = n.f1.accept(this,null);
+    // try
+    // {
+    //   String parameter_type = n.f0.accept(this,null);
+    //   String parameter_name = n.f1.accept(this,null);
 
-      // Insert argument to current function of current class
-      symbolTable.classRecord.get(currentClass).functions.get(currentFunction).addParameter(parameter_name,parameter_type);
+    //   // Insert argument to current function of current class
+    //   symbolTable.classRecord.get(currentClass).functions.get(currentFunction).addParameter(parameter_name,parameter_type);
 
-      return "FormalParameter";
-    }
-    catch (Exception e)
-    {
-      System.err.println("Exception thrown in FormalParameter: " + e.getMessage());
-      return null;
-    }
+    //   return "FormalParameter";
+    // }
+    // catch (Exception e)
+    // {
+    //   System.err.println("Exception thrown in FormalParameter: " + e.getMessage());
+    //   return null;
+    // }
+
+    String parameter_type = n.f0.accept(this,null);
+    String parameter_name = n.f1.accept(this,null);
+
+    // Insert argument to current function of current class
+    symbolTable.classRecord.get(currentClass).functions.get(currentFunction).addParameter(parameter_name,parameter_type);
+
+    return "FormalParameter";
   }
 
   /**

@@ -33,7 +33,7 @@ public class ClassData
   {
     // Check if function has already been declared in class
     if(functions.containsKey(name))
-      throw new RuntimeException("Function: " + name + " in class " + this.name + " has already been declared\n");
+      throw new RuntimeException("Function: " + name + ", in class " + this.name + ", has already been declared\n");
 
     functions.put(name,info);
   }
@@ -45,14 +45,27 @@ public class ClassData
       {
         // check for the return type of polymorphed function  
         if(parentClass.functions.get(name).returnType != functions.get(name).returnType)
-          throw new RuntimeException("Functions " + name + " return type in class " + name + " must be the same with superclass' " + parentClass.name + " inheritant function\n");
+          throw new RuntimeException("Function's: " + name + " return type in class: " + name + ", must be the same with superclass: " + parentClass.name + ", inheritant function\n");
 
         // check for the arguments of the polymorphed function
         ArrayList<String> parentclass_args_types = new ArrayList<>(parentClass.functions.get(name).parameters.values());
-        ArrayList<String> derived_args_types =    new ArrayList<>(functions.get(name).parameters.values());
+        ArrayList<String> derived_args_types = new ArrayList<>(functions.get(name).parameters.values());
+        
+        System.out.print("Parent class argument types: ");
+
+        for (String type : parentclass_args_types) {
+            System.out.print(type + " ");
+        }
+        System.out.println();
+        
+        System.out.print("Derived class argument types: ");
+        for (String type : derived_args_types) {
+            System.out.print(type + " ");
+        }
+        System.out.println();
 
         if( !(parentclass_args_types.equals(derived_args_types)) )
-          throw new RuntimeException("Functions " + name + " arguments in class " + name + " must be the same with superclass' " + parentClass.name + " inheritant function\n");
+          throw new RuntimeException("Function's: " + name + " arguments in class: " + name + ", must be the same with superclass: " + parentClass.name + ", inheritant function\n");
     
       }
   }

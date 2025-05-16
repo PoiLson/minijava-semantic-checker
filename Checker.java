@@ -203,7 +203,7 @@ public class Checker
         String clauseType = findType(clause);
 
         if(clauseType != "boolean")
-            throw new RuntimeException("Clause: " + clause + ", in method " + currentMethod + ", of class " + currentClass + " isn't a boolean.");
+            throw new RuntimeException("Clause: " + clause + ", in method: " + currentMethod + ", of class: " + currentClass + ", isn't a boolean.");
     }
 
     // This function checks if the AND expression is correct
@@ -230,7 +230,7 @@ public class Checker
         String primaryExprType = findType(primaryExpr);
 
         if(primaryExprType != "int")
-            throw new RuntimeException("Clause: " + primaryExpr + ", in method " + currentMethod + ", of class " + currentClass + " isn't an int.");
+            throw new RuntimeException("Clause: " + primaryExpr + ", in method: " + currentMethod + ", of class: " + currentClass + " isn't an int.");
     }
 
     // This function checks if the primary expression given is able of arithmetic operations
@@ -238,14 +238,14 @@ public class Checker
     {
         // Check first variable
         if(firstPrimaryExpr == "boolean" || firstPrimaryExpr == "this" || firstPrimaryExpr == "int[]" || firstPrimaryExpr == "boolean[]" || firstPrimaryExpr.startsWith("/") || symboltable.classRecord.containsKey(firstPrimaryExpr))
-            throw new RuntimeException("Invalid AND operation in method: " + currentMethod + ", of class: " + currentClass + ", first primary expression must be of type int");
+            throw new RuntimeException("Invalid operation in method: " + currentMethod + ", of class: " + currentClass + ", first primary expression must be of type int");
         
         if(firstPrimaryExpr != "int")
             isPrimaryExprInt(firstPrimaryExpr);
         
         // Check second variable
         if(secondPrimaryExpr == "boolean" || secondPrimaryExpr == "this" || secondPrimaryExpr == "int[]" || secondPrimaryExpr == "boolean[]" || secondPrimaryExpr.startsWith("/") || symboltable.classRecord.containsKey(secondPrimaryExpr))
-            throw new RuntimeException("Invalid AND operation in method " + currentMethod + ", of class " + currentClass + ", second primary expression must be of type int");
+            throw new RuntimeException("Invalid operation in method: " + currentMethod + ", of class: " + currentClass + ", second primary expression must be of type int");
         
         if(secondPrimaryExpr != "int")
             isPrimaryExprInt(secondPrimaryExpr);
@@ -258,7 +258,7 @@ public class Checker
 
         // Check if type is int array or a boolean array
         if(!(typeArrName.equals("int[]") || typeArrName.equals("boolean[]")))
-            throw new RuntimeException("This array: " + arrayName + ", in method " + currentMethod + ", of class " + currentClass + " isn't an int or a boolean array");
+            throw new RuntimeException("This array: " + arrayName + ", in method: " + currentMethod + ", of class: " + currentClass + ", isn't an int or a boolean array");
    
         if(typeArrName.equals("int[]"))
             return "int[]";
@@ -282,7 +282,7 @@ public class Checker
         
         // Check second variable
         if(arraySize == "boolean" || arraySize == "this" || arraySize == "int[]" || arraySize.startsWith("/") || symboltable.classRecord.containsKey(arraySize))
-            throw new RuntimeException("Invalid array lookup in method " + currentMethod + ", of class " + currentClass + ", size expression must be of type int");
+            throw new RuntimeException("Invalid array lookup in method: " + currentMethod + ", of class: " + currentClass + ", size expression must be of type int");
         
         if(arraySize != "int")
             isPrimaryExprInt(arraySize);
@@ -315,7 +315,7 @@ public class Checker
         String type = findType(var);
 
         if( type == "int" || type == "int[]" || type == "boolean[]" || type == "boolean" )
-            throw new RuntimeException("Var " + var + ", in method " + currentMethod + ", of class " + currentClass + " must be a declared class");
+            throw new RuntimeException("Var " + var + ", in method: " + currentMethod + ", of class: " + currentClass + " must be a declared class");
         
         return type;
     }
@@ -330,7 +330,7 @@ public class Checker
             return;
 
         if( expr == "boolean" || expr == "int" || expr == "int[]" || expr == "boolean[]" )
-            throw new RuntimeException("Function call in method " + currentMethod + ", of class " + currentClass + ", cannot be called by a non class object");
+            throw new RuntimeException("Function call in method: " + currentMethod + ", of class: " + currentClass + ", cannot be called by a non class object");
         
         isIdentifierDeclared(expr);
         isVarDeclaredClass(expr);
@@ -391,14 +391,14 @@ public class Checker
             }
 
             if(!found)
-                throw new RuntimeException("There is no method " + method + ", in class " + fromClass + " to call from. ( tried to call from method " + currentMethod + ", of class " + currentClass + ")");
+                throw new RuntimeException("There is no method " + method + ", in class " + fromClass + " to call from ( tried to call from method: " + currentMethod + ", of class: " + currentClass + ")");
         }
         else
-            throw new RuntimeException("There is no method " + method + ", in class " + fromClass + " to call from. ( tried to call from method " + currentMethod + ", of class " + currentClass + ")");
+            throw new RuntimeException("There is no method " + method + ", in class " + fromClass + " to call from ( tried to call from method: " + currentMethod + ", of class: " + currentClass + ")");
         
         // Check if the number of parameters given is the same with method's declared number of parameters
         if(methodArgs.size() != parameters.size())
-            throw new RuntimeException("Parameters aren't the same type, as declared, in method " + method + ", of class " + fromClass + " to call from. ( tried to call from method " + currentMethod + ", of class " + currentClass + ")");
+            throw new RuntimeException("Parameters aren't the same type, as declared, in method: " + method + ", of class: " + fromClass + ", to call from ( tried to call from method: " + currentMethod + ", of class: " + currentClass + ")");
         
         // Check for type equality
         for(int i=0; i <methodArgs.size(); i++)
@@ -420,7 +420,7 @@ public class Checker
                     }
 
                     if(!found)
-                        throw new RuntimeException("Parameters aren't the same type, as declared, in method " + method + ", of class " + fromClass + " to call from. ( tried to call from method " + currentMethod + ", of class " + currentClass + ")");
+                        throw new RuntimeException("Parameters aren't the same type, as declared, in method: " + method + ", of class: " + fromClass + ", to call from ( tried to call from method: " + currentMethod + ", of class: " + currentClass + ")");
                 }
             }
         }
@@ -480,7 +480,7 @@ public class Checker
     public void checkPrintStatement(String expressionType)
     {
         if(expressionType == null || !((expressionType.equals("int")) || (expressionType.equals("boolean"))))
-            throw new RuntimeException("The expression type in the print statement is not printable (boolean or int), it is: " + expressionType + "\nIn method: " + currentMethod + ", of class: " + currentClass);
+            throw new RuntimeException("The expression type in the print statement is not printable (boolean or int), it is: " + expressionType + "\n\t\t\t\t\t\t       In method: " + currentMethod + ", of class: " + currentClass);
     }
 
     // Check if expression's return type is the same as method's declared one
@@ -490,7 +490,7 @@ public class Checker
         if(!(declaredType.equals(returnType)))
         {
             if(!(symboltable.classRecord.containsKey(returnType)))
-                throw new RuntimeException("Method " + currentMethod + ", in class " + currentClass + " is trying to return a type " + returnType + " , while it expects a type " + declaredType);
+                throw new RuntimeException("Method " + currentMethod + ", in class " + currentClass + " is trying to return a type " + returnType + ", while it expects a type " + declaredType);
             
             String parentClass = symboltable.classRecord.get(returnType).extendsFrom;
 
@@ -502,7 +502,7 @@ public class Checker
                 parentClass = symboltable.classRecord.get(parentClass).extendsFrom;
             }
 
-            throw new RuntimeException("Method " + currentMethod + ", in class " + currentClass + " is trying to return a type " + returnType + " , while it expects a type " + declaredType);
+            throw new RuntimeException("Method " + currentMethod + ", in class " + currentClass + " is trying to return a type " + returnType + ", while it expects a type " + declaredType);
         }
     }
 

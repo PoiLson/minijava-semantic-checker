@@ -32,11 +32,11 @@ public class FunctionData
   {
     // check if variable has already been in declared in function
     if(variables.containsKey(varName))
-      throw new RuntimeException("Multiple declaration of variable " + varName + " in function " + this.name + "\n");
+      throw new RuntimeException("Multiple declaration of variable: " + varName + ", in function: " + this.name + "\n");
 
     // check if variable has already been in declared in function as parameter
     if(parameters.containsKey(varName))
-      throw new RuntimeException("Variable " + varName + " has already been declared as parameter in function " + this.name + "\n");
+      throw new RuntimeException("Variable: " + varName + ", has already been declared as parameter in function: " + this.name + "\n");
     
     variables.put(varName,varType);
   }

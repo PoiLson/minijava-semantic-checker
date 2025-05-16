@@ -15,6 +15,7 @@ public class Main {
 
         FileInputStream fis = null;
         boolean semanticCheckPassed = true;
+        boolean continueSecondParse = true;
 
         //Check every file that we have as input
         for(int i = 0; i < args.length; i++)
@@ -38,33 +39,35 @@ public class Main {
                 }
                 catch (Exception e)
                 {
-                    semanticCheckPassed = false;
+                    continueSecondParse = false;
                     System.err.println("Exception thrown in the making of the symbol table: " + e.getMessage());
                 }
 
-                builder.getSymbolTable().printSymbolTable();
-
-
-                // SEMANTIC CHECKING, second pass of the code!
-                SemanticCheckerVisitor checker = new SemanticCheckerVisitor(builder.getSymbolTable());
-                try
+                if(continueSecondParse)
                 {
-                    root.accept(checker, null); //recursively visits every node, letting you add logic at each visit (e.g. store variables, check types, print info).
-                }
-                catch (Exception e)
-                {
-                    semanticCheckPassed = false;
-                    System.err.println("Exception thrown in the semantic checking of the code: " + e.getMessage());
-                }
+                    builder.getSymbolTable().printSymbolTable();
 
-                if(semanticCheckPassed)
-                {
-                    System.out.println("Semantic checks passed.");
+                    // SEMANTIC CHECKING, second pass of the code!
+                    SemanticCheckerVisitor checker = new SemanticCheckerVisitor(builder.getSymbolTable());
+                    try
+                    {
+                        root.accept(checker, null); //recursively visits every node, letting you add logic at each visit (e.g. store variables, check types, print info).
+                    }
+                    catch (Exception e)
+                    {
+                        semanticCheckPassed = false;
+                        System.err.println("Exception thrown in the semantic checking of the code: " + e.getMessage());
+                    }
 
-                    // // Produce offset results
-                    // TypeChecker.getTypeCheck().StartCalculation();
+                    if(semanticCheckPassed)
+                    {
+                        System.out.println("Semantic checks passed.");
 
-                    System.err.println("Program parsed successfully.");
+                        // // Produce offset results
+                        // TypeChecker.getTypeCheck().StartCalculation();
+
+                        System.err.println("Program parsed successfully.");
+                    }
                 }
             }
             catch(ParseException ex)
