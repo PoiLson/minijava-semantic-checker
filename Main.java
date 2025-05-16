@@ -20,6 +20,7 @@ public class Main {
         for(int i = 0; i < args.length; i++)
         {
             try{
+                System.out.println("###################################################################");
                 System.out.println("Checking file: " + args[i]);
                 fis = new FileInputStream(args[i]);
 

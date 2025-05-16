@@ -176,7 +176,7 @@ public class Checker
             }
         }
 
-        throw new RuntimeException("This: " + identifier + " and this one: " + expression + " are not compatible for assignent.");
+        throw new RuntimeException("Trying to assign type: " + expression + " this into: {" + identifier + "} but it is of type: " + identifierType);
     }
 
     // This function returns the expression's type
@@ -261,9 +261,9 @@ public class Checker
             throw new RuntimeException("This array: " + arrayName + " in method " + currentMethod + " of class " + currentClass + " isn't an int or a boolean array");
    
         if(typeArrName.equals("int[]"))
-            return "int";
+            return "int[]";
         else if(typeArrName.equals("boolean[]"))
-            return "boolean";
+            return "boolean[]";
 
         return null;
     }
@@ -287,10 +287,16 @@ public class Checker
         if(arraySize != "int")
             isPrimaryExprInt(arraySize);
 
-        return typeArrName;
+        // Indexing an array returns element type, int or boolean
+        if(typeArrName.equals("int[]"))
+            return "int";
+        else if(typeArrName.equals("boolean[]"))
+            return "boolean";
+
+        return null;
     }
 
-    // This function checks if tof the MessageSend rule of our grammarhe array name has been declarfed before in our program and in the current scope
+    // This function checks if of the MessageSend rule of our grammarhe array name has been declarfed before in our program and in the current scope
     public String checkArrayLength(String arrayName)
     {
         // Check if the arrayName is actually an array's name
@@ -300,7 +306,7 @@ public class Checker
         if(!(arrayName.equals("int[]") || arrayName.equals("boolean[]")))
             return isArrNameValid(arrayName);
         
-        return null;
+        return "int";
     }
 
     // Check if variable is an existing class
@@ -512,6 +518,9 @@ public class Checker
 
 
 
+
+
+
     // This function checks if the type given is in correct form
     public boolean checkType(String type)
     {
@@ -523,38 +532,40 @@ public class Checker
     }
 
     // This function checks if the type given is boolean array type
-    public boolean checkBooleanArrayType(String type)
+    public String checkBooleanArrayType(String type)
     {
         if(type == "boolean[]")
-            return true;
+            return type;
         
         throw new RuntimeException("Was expecting boolean[] instead of: " + type );
     }
 
     // This function checks if the type given is integer array type
-    public boolean checkIntegerArrayType(String type)
+    public String checkIntegerArrayType(String type)
     {
-        if(type == "int[]")
-            return true;
+        if(type.equals("int[]"))
+            return type;
         
         throw new RuntimeException("Was expecting int[] instead of: " + type );
     }
 
-    // This function checks if the type given is boolean
-    public boolean checkBooleanType(String type)
-    {
-        if(type == "boolean")
-            return true;
-        
-        throw new RuntimeException("Was expecting boolean instead of: " + type );
-    }
+    // MAYBE THERE IS NO NEED TO HAVE THEM
 
-    // This function checks if the type given is integer
-    public boolean checkIntegerType(String type)
-    {
-        if(type.equals("int"))
-            return true;
+    // // This function checks if the type given is boolean
+    // public boolean checkBooleanType(String type)
+    // {
+    //     if(type == "boolean")
+    //         return true;
         
-        throw new RuntimeException("Was expecting int instead of: " + type );
-    }
+    //     throw new RuntimeException("Was expecting boolean instead of: " + type );
+    // }
+
+    // // This function checks if the type given is integer
+    // public boolean checkIntegerType(String type)
+    // {
+    //     if(type.equals("int"))
+    //         return true;
+        
+    //     throw new RuntimeException("Was expecting int instead of: " + type );
+    // }
 }
