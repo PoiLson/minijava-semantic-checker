@@ -14,6 +14,7 @@ public class Main {
         }
 
         FileInputStream fis = null;
+        boolean semanticCheckPassed = true;
 
         //Check every file that we have as input
         for(int i = 0; i < args.length; i++)
@@ -22,8 +23,8 @@ public class Main {
                 System.out.println("Checking file: " + args[i]);
                 fis = new FileInputStream(args[i]);
 
-                // System.out.println("hiii");
                 MiniJavaParser parser = new MiniJavaParser(fis);
+                semanticCheckPassed = true;
 
                 //Now root is my abstract syntax tree
                 Goal root = parser.Goal();
@@ -36,6 +37,7 @@ public class Main {
                 }
                 catch (Exception e)
                 {
+                    semanticCheckPassed = false;
                     System.err.println("Exception thrown in the making of the symbol table: " + e.getMessage());
                 }
 
@@ -50,21 +52,25 @@ public class Main {
                 }
                 catch (Exception e)
                 {
+                    semanticCheckPassed = false;
                     System.err.println("Exception thrown in the semantic checking of the code: " + e.getMessage());
                 }
 
-                System.out.println("Semantic checks passed.");
+                if(semanticCheckPassed)
+                {
+                    System.out.println("Semantic checks passed.");
 
-                // // Produce offset results
-                // TypeChecker.getTypeCheck().StartCalculation();
+                    // // Produce offset results
+                    // TypeChecker.getTypeCheck().StartCalculation();
 
-                System.err.println("Program parsed successfully.");
+                    System.err.println("Program parsed successfully.");
+                }
             }
             catch(ParseException ex)
             {
                 System.err.println("Parse error in file: " + args[i]);
                 System.out.println(ex.getMessage());
-    }
+            }
             catch(FileNotFoundException ex)
             {
                 System.err.println("File not found: " + args[i]);

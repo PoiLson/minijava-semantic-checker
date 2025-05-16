@@ -100,7 +100,7 @@ public class Checker
 
         if( !(declaredAsClassField || declaredAsMethodParameter || declaredAsMethodVariable || declaredAsFieldInParentClass) )
             throw new RuntimeException("This identifier: " + identifier + " is not declared anywhere.");
-    
+
         return true;
     }   
     
@@ -193,7 +193,7 @@ public class Checker
         // if expression returns an identifier
         else if( !expression.startsWith("/") && expression != "int" && expression != "boolean" && expression != "int[]" && expression != "boolean[]" && !(symboltable.classRecord.containsKey(expression)))
             typeOfExpression = findType(expression);
-        
+
         return typeOfExpression;
     }
 
