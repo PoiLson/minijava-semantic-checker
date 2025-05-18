@@ -17,6 +17,11 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     // Argument type lists for nested method calls
     Stack <ArrayList<String>> methodCalls;
 
+    public Checker getChecker()
+    {
+        return this.checker;
+    }
+
     // Constructor
     public SemanticCheckerVisitor(SymbolTable symbolTable)
     {
@@ -88,6 +93,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
         String expression = n.f2.accept(this,null);
 
         checker.checkAssignmentStatement(identifier, expression);
+
         return "Check AssignmentStatement";
     }
 
@@ -108,7 +114,6 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
         System.out.println("We are in Expression Declaration");
 
         String expression = n.f0.accept(this,null);
-
         String result = checker.checkExpression(expression);
 
         return result;

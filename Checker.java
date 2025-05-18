@@ -304,7 +304,7 @@ public class Checker
             throw new RuntimeException("Invalid array length operation in method: " + currentMethod + ", of class: " + currentClass + ", expression must be of type array.");
         
         if(!(arrayName.equals("int[]") || arrayName.equals("boolean[]")))
-            return isArrNameValid(arrayName);
+            isArrNameValid(arrayName);
         
         return "int";
     }
@@ -549,23 +549,100 @@ public class Checker
         throw new RuntimeException("Was expecting int[] instead of: " + type );
     }
 
-    // MAYBE THERE IS NO NEED TO HAVE THEM
+    // Let's start with the offset calculation
+    public void calculateOffsets()
+    {
+        Map<String, Integer> classFieldOffsets = new HashMap<>();
+        Map<String, Integer> classMethodOffsets = new HashMap<>();
 
-    // // This function checks if the type given is boolean
-    // public boolean checkBooleanType(String type)
-    // {
-    //     if(type == "boolean")
-    //         return true;
-        
-    //     throw new RuntimeException("Was expecting boolean instead of: " + type );
-    // }
+        boolean mainClass = false;
+        String mainClassName = "";
 
-    // // This function checks if the type given is integer
-    // public boolean checkIntegerType(String type)
-    // {
-    //     if(type.equals("int"))
-    //         return true;
-        
-    //     throw new RuntimeException("Was expecting int instead of: " + type );
-    // }
+        for (Map.Entry<String, ClassData> classEntry : symboltable.classRecord.entrySet())
+        {
+            String className = classEntry.getKey();
+            this.currentClass = className;
+            this.currentMethod = "";
+
+            // IF I DO NOT WANT TO PRINT THE MAIN CLASS
+            // UNCOMMENT THIS SECTION EVENTUALLY
+            
+            // // Skip the main class initially
+            // if (!mainClass)
+            // {
+            //     mainClass = true;
+            //     mainClassName = className;
+
+            //     continue;
+            // }
+
+            System.out.println("------------------------------------------------------------------");
+            System.out.println("--> Class " + className);
+
+            String parentClass = classEntry.getValue().extendsFrom;
+            int fieldOffset = 0;
+            int methodOffset = 0;
+
+            if (!parentClass.isEmpty() && !parentClass.equals(mainClassName))
+            {
+                fieldOffset = classFieldOffsets.get(parentClass);
+                methodOffset = classMethodOffsets.get(parentClass);
+            }
+
+            classFieldOffsets.put(className, fieldOffset);
+            classMethodOffsets.put(className, methodOffset);
+
+            // Calculate field offsets
+            System.out.println("|-> Variables:");
+            for (Map.Entry<String, String> fieldEntry : classEntry.getValue().variables.entrySet())
+            {
+                String fieldName = fieldEntry.getKey();
+                String fieldType = findType(fieldName);
+                int size ;
+
+                if(fieldType == "int")
+                    size = 4;
+                else if(fieldType == "boolean")
+                    size = 1;
+                else
+                    size = 8;
+
+                System.out.println("|   " + className + "." + fieldName + " : " + fieldOffset);
+                
+                fieldOffset += size;
+            }
+
+            // Calculate method offsets (excluding overridden methods)
+            System.out.println("|\n|-> Methods:");
+
+            for (Map.Entry<String, FunctionData> methodEntry : classEntry.getValue().functions.entrySet())
+            {
+                String methodName = methodEntry.getKey();
+                boolean isOverridden = false;
+                String checkAncestor = parentClass;
+
+                while (!checkAncestor.isEmpty())
+                {
+                    if (symboltable.classRecord.get(checkAncestor).functions.containsKey(methodName))
+                    {
+                        isOverridden = true;
+                        break;
+                    }
+
+                    checkAncestor = symboltable.classRecord.get(checkAncestor).extendsFrom;
+                }
+
+                if (!isOverridden) 
+                {
+                    System.out.println("|   " + className + "." + methodName + " : " + methodOffset);
+                    methodOffset += 8;
+                }
+                
+            }
+
+            classFieldOffsets.put(className, fieldOffset);
+            classMethodOffsets.put(className, methodOffset);
+
+        }
+    }
 }

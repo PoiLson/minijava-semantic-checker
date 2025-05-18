@@ -62,9 +62,9 @@ public class Main {
                     if(semanticCheckPassed)
                     {
                         System.out.println("Semantic checks passed.");
+                        System.out.println("Starting offset calculations ...");
 
-                        // // Produce offset results
-                        // TypeChecker.getTypeCheck().StartCalculation();
+                        checker.getChecker().calculateOffsets();
 
                         System.err.println("Program parsed successfully.");
                     }
