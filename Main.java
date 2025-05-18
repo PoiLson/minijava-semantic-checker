@@ -40,7 +40,7 @@ public class Main {
                 catch (Exception e)
                 {
                     continueSecondParse = false;
-                    System.err.println("Exception thrown in the making of the symbol table: " + e.getMessage());
+                    System.err.println("Exception thrown in the making of the symbol table:\n\t|-> " + e.getMessage());
                 }
 
                 if(continueSecondParse)
@@ -56,7 +56,7 @@ public class Main {
                     catch (Exception e)
                     {
                         semanticCheckPassed = false;
-                        System.err.println("Exception thrown in the semantic checking of the code: " + e.getMessage());
+                        System.err.println("Exception thrown in the semantic checking of the code:\n\t|-> " + e.getMessage());
                     }
 
                     if(semanticCheckPassed)

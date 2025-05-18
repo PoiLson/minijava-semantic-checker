@@ -176,7 +176,7 @@ public class Checker
             }
         }
 
-        throw new RuntimeException("Trying to assign type: " + expression + " into: {" + identifier + "} but it is of type: " + identifierType + ".\nInside of method: " + currentMethod + ", of class: " + currentClass);
+        throw new RuntimeException("Trying to assign type: " + expression + ", into: {" + identifier + "} but it is of type: " + identifierType + ".\n\t|   Inside of method: " + currentMethod + ", of class: " + currentClass);
     }
 
     // This function returns the expression's type
@@ -391,10 +391,10 @@ public class Checker
             }
 
             if(!found)
-                throw new RuntimeException("There is no method " + method + ", in class " + fromClass + " to call from ( tried to call from method: " + currentMethod + ", of class: " + currentClass + ")");
+                throw new RuntimeException("There is no method " + method + ", in class " + fromClass + ", to call from ( tried to call from method: " + currentMethod + ", of class: " + currentClass + ")");
         }
         else
-            throw new RuntimeException("There is no method " + method + ", in class " + fromClass + " to call from ( tried to call from method: " + currentMethod + ", of class: " + currentClass + ")");
+            throw new RuntimeException("There is no method " + method + ", in class " + fromClass + ", to call from ( tried to call from method: " + currentMethod + ", of class: " + currentClass + ")");
         
         // Check if the number of parameters given is the same with method's declared number of parameters
         if(methodArgs.size() != parameters.size())
@@ -480,7 +480,7 @@ public class Checker
     public void checkPrintStatement(String expressionType)
     {
         if(expressionType == null || !((expressionType.equals("int")) || (expressionType.equals("boolean"))))
-            throw new RuntimeException("The expression type in the print statement is not printable (boolean or int), it is: " + expressionType + "\n\t\t\t\t\t\t       In method: " + currentMethod + ", of class: " + currentClass);
+            throw new RuntimeException("The expression type in the print statement is not printable (boolean or int), it is: " + expressionType + "\n\t|   In method: " + currentMethod + ", of class: " + currentClass);
     }
 
     // Check if expression's return type is the same as method's declared one
@@ -490,7 +490,7 @@ public class Checker
         if(!(declaredType.equals(returnType)))
         {
             if(!(symboltable.classRecord.containsKey(returnType)))
-                throw new RuntimeException("Method " + currentMethod + ", in class " + currentClass + " is trying to return a type " + returnType + ", while it expects a type " + declaredType);
+                throw new RuntimeException("Method " + currentMethod + ", in class " + currentClass + ", is trying to return a type " + returnType + ", while it expects a type " + declaredType);
             
             String parentClass = symboltable.classRecord.get(returnType).extendsFrom;
 
@@ -502,7 +502,7 @@ public class Checker
                 parentClass = symboltable.classRecord.get(parentClass).extendsFrom;
             }
 
-            throw new RuntimeException("Method " + currentMethod + ", in class " + currentClass + " is trying to return a type " + returnType + ", while it expects a type " + declaredType);
+            throw new RuntimeException("Method " + currentMethod + ", in class " + currentClass + ", is trying to return a type " + returnType + ", while it expects a type " + declaredType);
         }
     }
 
