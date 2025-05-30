@@ -66,7 +66,6 @@ public class Checker
     // Maybe bollean 0 -> it does not exist, 1 -> it exists
     public boolean checkExistingMethod()
     {
-        // NEEDS FIXING!!!
         if(symboltable.classRecord.containsKey(currentMethod))
         {
             return true;

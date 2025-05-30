@@ -62,7 +62,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     @Override
     public String visit(MainClass n, String argu) throws Exception
     {
-        System.out.println("We are in MainClass Declaration");
+        //System.out.println("We are in MainClass Declaration");
         // Store the name of the class so the checker will check if it exists
         checker.setCurrentClass(n.f1.accept(this, argu));
 
@@ -87,7 +87,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     @Override
     public String visit(AssignmentStatement n, String argu) throws Exception
     {
-        System.out.println("We are in AssignmentStatement Declaration");
+        //System.out.println("We are in AssignmentStatement Declaration");
 
         String identifier = n.f0.accept(this,null);
         String expression = n.f2.accept(this,null);
@@ -111,7 +111,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     @Override
     public String visit(Expression n, String argu) throws Exception
     {
-        System.out.println("We are in Expression Declaration");
+        //System.out.println("We are in Expression Declaration");
 
         String expression = n.f0.accept(this,null);
         String result = checker.checkExpression(expression);
@@ -127,7 +127,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     @Override
     public String visit(AndExpression n, String argu) throws Exception
     {
-        System.out.println("We are in AndExpression Declaration");
+        //System.out.println("We are in AndExpression Declaration");
         
         String firstClause = n.f0.accept(this,null);
         String secondClause = n.f2.accept(this,null);
@@ -146,7 +146,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     @Override
     public String visit(CompareExpression n, String argu) throws Exception
     {
-        System.out.println("We are in CompareExpression Declaration");
+        //System.out.println("We are in CompareExpression Declaration");
         
         String firstPrimaryExpr = n.f0.accept(this,null);
         String secondPrimaryExpr = n.f2.accept(this,null);
@@ -164,7 +164,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     @Override
     public String visit(PlusExpression n, String argu) throws Exception
     {
-        System.out.println("We are in PlusExpression Declaration");
+        //System.out.println("We are in PlusExpression Declaration");
     
         String firstPrimaryExpr = n.f0.accept(this,null);
         String secondPrimaryExpr = n.f2.accept(this,null);
@@ -182,7 +182,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     @Override
     public String visit(MinusExpression n, String argu) throws Exception
     {
-        System.out.println("We are in MinusExpression Declaration");
+        //System.out.println("We are in MinusExpression Declaration");
 
         String firstPrimaryExpr = n.f0.accept(this,null);
         String secondPrimaryExpr = n.f2.accept(this,null);
@@ -200,7 +200,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     @Override
     public String visit(TimesExpression n, String argu) throws Exception
     {
-        System.out.println("We are in TimesExpression Declaration");
+        //System.out.println("We are in TimesExpression Declaration");
         
         String firstPrimaryExpr = n.f0.accept(this,null);
         String secondPrimaryExpr = n.f2.accept(this,null);
@@ -219,7 +219,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     @Override
     public String visit(ArrayLookup n, String argu) throws Exception
     {
-        System.out.println("We are in ArrayLookup Declaration");
+        //System.out.println("We are in ArrayLookup Declaration");
         
         String arrayName = n.f0.accept(this,null);
         String arraySize = n.f2.accept(this,null);
@@ -235,7 +235,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     @Override
     public String visit(ArrayLength n, String argu) throws Exception
     {
-        System.out.println("We are in ArrayLength Declaration");
+        //System.out.println("We are in ArrayLength Declaration");
         
         String arrayName = n.f0.accept(this,null);
 
@@ -253,7 +253,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     @Override
     public String visit(MessageSend n, String argu) throws Exception
     {
-        System.out.println("We are in MessageSend Declaration");
+        //System.out.println("We are in MessageSend Declaration");
         
         // Collect the types of the arguments of this method call
         methodCalls.push(new ArrayList<String>());
@@ -275,7 +275,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     @Override
     public String visit(NotExpression n, String argu) throws Exception
     {
-        System.out.println("We are in NotExpression Declaration");
+        //System.out.println("We are in NotExpression Declaration");
         
         String clause = n.f1.accept(this,null);
         checker.checkNotOperation(clause);
@@ -289,7 +289,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     @Override
     public String visit(ArrayAllocationExpression n, String argu) throws Exception
     {
-        System.out.println("We are in ArrayAllocationExpression Declaration");
+        //System.out.println("We are in ArrayAllocationExpression Declaration");
         
         String expr = n.f0.accept(this,null);
 
@@ -306,7 +306,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     @Override
     public String visit(BooleanArrayAllocationExpression n, String argu) throws Exception
     {
-        System.out.println("We are in BooleanArrayAllocationExpression Declaration");
+        //System.out.println("We are in BooleanArrayAllocationExpression Declaration");
         
         String expressionType = n.f3.accept(this, null);
 
@@ -328,7 +328,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     @Override
     public String visit(IntegerArrayAllocationExpression n, String argu) throws Exception
     {
-        System.out.println("We are in IntegerArrayAllocationExpression Declaration");
+        //System.out.println("We are in IntegerArrayAllocationExpression Declaration");
         
         String expressionType = n.f3.accept(this, null);
 
@@ -349,7 +349,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     @Override
     public String visit(AllocationExpression n, String argu) throws Exception
     {
-        System.out.println("We are in AllocationExpression Declaration");
+        //System.out.println("We are in AllocationExpression Declaration");
         
         String className = n.f1.accept(this,null);
 
@@ -367,7 +367,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     @Override
     public String visit(BracketExpression n, String argu) throws Exception
     {
-        System.out.println("We are in BracketExpression Declaration");
+        //System.out.println("We are in BracketExpression Declaration");
         
         // Visits expression
         String expression = n.f1.accept(this,null);
@@ -390,7 +390,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     @Override
     public String visit(ArrayAssignmentStatement n, String argu) throws Exception
     {
-        System.out.println("We are in ArrayAssignmentStatement Declaration");
+        //System.out.println("We are in ArrayAssignmentStatement Declaration");
         
         String arrType = n.f0.accept(this,null);
         String typeOfIndex = n.f2.accept(this,null);
@@ -412,7 +412,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     @Override
     public String visit(IfStatement n, String argu) throws Exception
     {
-        System.out.println("We are in IfStatement Declaration");
+        //System.out.println("We are in IfStatement Declaration");
         
         // Visit expression and get its type back
         String expressionType = n.f2.accept(this,null);
@@ -439,7 +439,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     @Override
     public String visit(WhileStatement n, String argu) throws Exception
     {
-        System.out.println("We are in WhileStatement Declaration");
+        //System.out.println("We are in WhileStatement Declaration");
         
         // Visit expression and get its type back
         String expressionType = n.f2.accept(this,null);
@@ -463,7 +463,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     @Override
     public String visit(PrintStatement n, String argu) throws Exception
     {
-        System.out.println("We are in PrintStatement Declaration");
+        //System.out.println("We are in PrintStatement Declaration");
         
         // Visit expression and get its type back
         String expressionType = n.f2.accept(this,null);
@@ -481,7 +481,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     @Override
     public String visit(ExpressionList n, String argu) throws Exception
     {
-        System.out.println("We are in ExpressionList Declaration");
+        //System.out.println("We are in ExpressionList Declaration");
         
         String firstParameter = n.f0.accept(this,argu);
         methodCalls.peek().add(firstParameter);
@@ -499,7 +499,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     @Override
     public String visit(ExpressionTerm n, String argu) throws Exception
     {
-        System.out.println("We are in ExpressionTerm Declaration");
+        //System.out.println("We are in ExpressionTerm Declaration");
         
         String parameter = n.f1.accept(this,argu);
         methodCalls.peek().add(parameter);
@@ -518,7 +518,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     @Override
     public String visit(ClassDeclaration n, String argu) throws Exception
     {
-        System.out.println("We are in ClassDeclaration Declaration");
+        //System.out.println("We are in ClassDeclaration Declaration");
         
         String className = n.f1.accept(this,null);
         checker.setCurrentClass(className);
@@ -551,7 +551,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     @Override
     public String visit(MethodDeclaration n, String argu) throws Exception
     {
-        System.out.println("We are in MethodDeclaration Declaration");
+        //System.out.println("We are in MethodDeclaration Declaration");
         
         String methodName = n.f2.accept(this,null);
         checker.setCurrentMethod(methodName);
@@ -589,7 +589,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     @Override
     public String visit(ClassExtendsDeclaration n, String argu) throws Exception
     {
-        System.out.println("We are in ClassExtendsDeclaration Declaration");
+        //System.out.println("We are in ClassExtendsDeclaration Declaration");
         
         String className = n.f1.accept(this,null);
         checker.setCurrentClass(className);
@@ -629,7 +629,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     */
     public String visit(ArrayType n, String argu) throws Exception
     {
-        System.out.println("We are in ArrayType Declaration");
+        //System.out.println("We are in ArrayType Declaration");
         String arrayType =  n.f0.accept(this, null);
 
         return arrayType;
@@ -645,7 +645,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     @Override
     public String visit(Type n, String argu) throws Exception
     {
-        System.out.println("We are in Type Declaration");
+        //System.out.println("We are in Type Declaration");
         
         String type = n.f0.accept(this,null);
         checker.checkType(type);
@@ -661,7 +661,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     @Override
     public String visit(BooleanArrayType n, String argu) throws Exception
     {
-        System.out.println("We are in BooleanArrayType Declaration");
+        //System.out.println("We are in BooleanArrayType Declaration");
         
         String type = n.f0.accept(this,null);
         type = type + "[]";
@@ -677,7 +677,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     @Override
     public String visit(IntegerArrayType n, String argu) throws Exception
     {
-        System.out.println("We are in IntegerArrayType Declaration");
+        //System.out.println("We are in IntegerArrayType Declaration");
 
         String type = n.f0.accept(this,null);
         type = type + "[]";
@@ -691,7 +691,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     @Override
     public String visit(BooleanType n, String argu) throws Exception
     {
-        System.out.println("We are in BooleanType Declaration");
+        //System.out.println("We are in BooleanType Declaration");
         
         return n.f0.toString();
     }
@@ -702,7 +702,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     @Override
     public String visit(IntegerType n, String argu) throws Exception
     {
-        System.out.println("We are in IntegerType Declaration");
+        //System.out.println("We are in IntegerType Declaration");
 
         return n.f0.toString();
 
@@ -715,7 +715,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     @Override
     public String visit(Identifier n, String argu)
     {
-        System.out.println("We are in Identifier Declaration");
+        //System.out.println("We are in Identifier Declaration");
 
         // Debugging reasons!!
         // String identifier = n.f0.toString();
@@ -732,7 +732,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     @Override
     public String visit(IntegerLiteral n, String argu)
     {
-        System.out.println("We are in IntegerLiteral Declaration");
+        //System.out.println("We are in IntegerLiteral Declaration");
         
         // Can it be anything else?
         return "int";
@@ -744,7 +744,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     @Override
     public String visit(TrueLiteral n, String argu)
     {
-        System.out.println("We are in TrueLiteral Declaration");
+        //System.out.println("We are in TrueLiteral Declaration");
         
         return "boolean";
     }
@@ -755,7 +755,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     @Override
     public String visit(FalseLiteral n, String argu)
     {
-        System.out.println("We are in FalseLiteral Declaration");
+        //System.out.println("We are in FalseLiteral Declaration");
         
         return "boolean";
     }
@@ -766,7 +766,7 @@ class SemanticCheckerVisitor extends GJDepthFirst <String, String>
     @Override
     public String visit(ThisExpression n, String argu)
     {
-        System.out.println("We are in ThisExpression Declaration");
+        //System.out.println("We are in ThisExpression Declaration");
         
         return "this";
     }

@@ -21,12 +21,13 @@ public class Main {
         for(int i = 0; i < args.length; i++)
         {
             try{
-                System.out.println("###################################################################");
+                // System.out.println("###################################################################");
                 System.out.println("Checking file: " + args[i]);
                 fis = new FileInputStream(args[i]);
 
                 MiniJavaParser parser = new MiniJavaParser(fis);
                 semanticCheckPassed = true;
+                continueSecondParse = true;
 
                 //Now root is my abstract syntax tree
                 Goal root = parser.Goal();
@@ -45,7 +46,7 @@ public class Main {
 
                 if(continueSecondParse)
                 {
-                    builder.getSymbolTable().printSymbolTable();
+                    // builder.getSymbolTable().printSymbolTable();
 
                     // SEMANTIC CHECKING, second pass of the code!
                     SemanticCheckerVisitor checker = new SemanticCheckerVisitor(builder.getSymbolTable());
