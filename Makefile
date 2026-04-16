@@ -1,4 +1,4 @@
-#Exercise for performing static analysis on MiniJava programs
+# Exercise for performing static analysis on MiniJava programs
 all: clean compile run
 
 compile:
@@ -10,7 +10,7 @@ compile:
 run:
 # Run the Main class, specifying the classpath to the compiled classes directory
 	clear
-#java Main ./FileInputs/Tests.java
+# java Main ./FileInputs/Tests.java
 # Multiple Files
 	java Main ./FileInputs/TestScopes.java ./FileInputs/Tests.java ./FileInputs/Test2.java 
 
